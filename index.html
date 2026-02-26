@@ -781,20 +781,20 @@ renderChat();
 // ── Smart parser ──────────────────────────────────────────────────────────────
 const SECTION_RULES = [
   { id:'coord', label:'Coordination Work', dot:'d-coord',
-    signals:/spoke to|spoke with|speak to|speak with|had a word|had a chat|had a call|had a meeting|called|messaged|meeting with|sync with|follow.?up|pinged|reached out|talked to|talk to|talk with|need to speak|need to connect|connect with|catch up|briefed|updated|informed|checked in|heard from|waiting for|asked .*(to|me)|he said|she said|they said|word with|chat with|need to reach|reach out/i },
+    signals:/spoke to|spoke with|speak to|speak with|had a word|had a chat|had a call|had a meeting|called|messaged|meeting with|sync with|follow.?up|pinged|reached out|talked to|talk to|talk with|need to speak|need to connect|connect with|catch up|briefed|updated|informed|checked in|heard from|waiting for|asked .*(to|me)|he said|she said|they said|word with|chat with|need to reach|reach out|coordinate with|plan.*session|plan.*meeting|plan.*sync|plan.*call|plan.*demo|plan.*training|schedule.*with|set up.*with|organise.*with|organize.*with/i },
   { id:'calls', label:'User Call Work',    dot:'d-calls',
     signals:/user call|user interview|interview|user research|research call|spoke to user|call with user|feedback call|customer call|ran a call|conducted/i },
   { id:'data',  label:'Data Work',         dot:'d-data',
     signals:/pull|check data|analyze|analysis|review.*data|data.*review|numbers|metrics|retention|conversion|dashboard|look at data|dig into|funnel|cohort|query/i },
   { id:'focus', label:'Focus Hour Work',   dot:'d-focus',
-    signals:/read|think about|brainstorm|write|draft|plan|design|figure out|spec|document|prepare|explore|ideate|map out|outline|review doc|go through/i },
+    signals:/read|think about|brainstorm|write|draft|design|figure out|spec|document|prepare|explore|ideate|map out|outline|review doc|go through/i },
 ];
 
 const TAG_RULES = [
   { tag:'homescreen',   tc:'t-coord',  pat:/homescreen|home screen|deep.?link|deeplink|deba/i },
   { tag:'A/B testing',  tc:'t-coord',  pat:/a\/b\s|ab test|experiment|appsflyer|apps.?flyer|ayush/i },
   { tag:'TV app',       tc:'t-coord',  pat:/tv app|ritik|television|android tv|fire tv/i },
-  { tag:'notifications',tc:'t-focus',  pat:/notification|bala|crm|push|reminder|copy/i },
+  { tag:'notifications',tc:'t-focus',  pat:/\bnotification\b|bala|crm|\bpush notification|reminder copy/i },
   { tag:'cognitive games',tc:'t-focus',pat:/game|mind math|viyu|kramika|cognitive|ashutosh/i },
   { tag:'research',     tc:'t-calls',  pat:/user call|interview|research|survey|whatsapp group/i },
   { tag:'14-day trial', tc:'t-data',   pat:/14.?day|trial|free trial/i },
@@ -890,7 +890,10 @@ Work sections:
 Available tags (pick closest or use ""): 14-day trial, A/B testing, TV app, cognitive games, research, notifications, homescreen
 Tag class map: 14-day trial→t-data | A/B testing→t-coord | TV app→t-coord | cognitive games→t-focus | research→t-calls | notifications→t-focus | homescreen→t-coord | ""→t-none
 
-People at Habuild: Ayush (engineer), Bala (mobile CRM), Ritik (video/content), Ashutosh (cognitive games), Deba (product designer), Himanshu, Saurabh Bhartia (founder/CEO)
+People at Habuild: Ayush (engineer), Bala (mobile CRM), Ritik (video/content), Ashutosh (cognitive games), Deba (product designer), Arun (Product Ops/Support), Himanshu, Saurabh Bhartia (founder/CEO)
+
+Examples of coord tasks: "coordinate with Arun to plan demo session", "plan training with Product Ops team", "schedule session with support team", "sync with Ayush on timeline"
+Note: "push notification" is the notifications tag. "push members to app" is NOT a notification task.
 
 If input is a question or request for advice, set isQuestion:true and add a concise helpful "answer" field.
 If input describes a task or action, set isQuestion:false.
@@ -1234,6 +1237,8 @@ function attachCheckboxHandlers(container, fileId) {
       const ind = document.getElementById('mwSaveIndicator');
       if (ind) { ind.classList.add('saved'); ind.textContent = 'Saved'; setTimeout(() => { ind.classList.remove('saved'); ind.textContent = 'Edited locally'; }, 1500); }
     });
+    // Prevent native click from toggling the checkbox back after mousedown already handled it
+    cb.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); });
   });
 }
 
