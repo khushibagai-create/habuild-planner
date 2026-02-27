@@ -1174,15 +1174,21 @@ const FILE_MAP = {
 // Reverse map: file id → filename on disk
 const ID_TO_FILE = Object.fromEntries(Object.entries(FILE_MAP).map(([f,id])=>[id,f]));
 
+// ── Custom work files ──────────────────────────────────────────────────────────
+const CUSTOM_WF_KEY = 'habuild_custom_wf';
+let customWorkFiles = JSON.parse(localStorage.getItem(CUSTOM_WF_KEY) || '[]');
+const saveCustomWF = () => localStorage.setItem(CUSTOM_WF_KEY, JSON.stringify(customWorkFiles));
+const findFile = id => WORK_FILES.find(f=>f.id===id) || customWorkFiles.find(f=>f.id===id);
+
 // ── File helpers ───────────────────────────────────────────────────────────────
 function getFileContent(id) {
-  return localStorage.getItem('habuild_mw_'+id) || (WORK_FILES.find(f=>f.id===id)||{}).content || '';
+  return localStorage.getItem('habuild_mw_'+id) || (findFile(id)||{}).content || '';
 }
 function hasLocalEdits(id) {
   return !!localStorage.getItem('habuild_mw_v_'+id);
 }
 function downloadFile(id) {
-  const file = WORK_FILES.find(f=>f.id===id); if (!file) return;
+  const file = findFile(id); if (!file) return;
   const blob = new Blob([file.content], {type:'text/markdown'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1230,38 +1236,108 @@ function renderMyWork() {
   renderFileContent(activeWorkFile || WORK_FILES[0].id);
 }
 
+function mkSidebarItem(f, deletable) {
+  const item = document.createElement('div');
+  item.className = 'mw-sidebar-item' + (f.id === activeWorkFile ? ' active' : '');
+  item.style.position = 'relative';
+  const dot = document.createElement('span'); dot.className = 'mw-sidebar-dot';
+  dot.style.background = SC_COLOR[f.sc] || '#444';
+  const name = document.createElement('span'); name.className = 'mw-sidebar-name';
+  name.textContent = f.title;
+  item.appendChild(dot); item.appendChild(name);
+  item.onclick = () => {
+    activeWorkFile = f.id;
+    document.getElementById('mwSidebar').querySelectorAll('.mw-sidebar-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    renderFileContent(f.id);
+  };
+  if (deletable) {
+    const del = document.createElement('button');
+    del.innerHTML = '&times;'; del.title = 'Delete file';
+    del.style.cssText = 'position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#555;font-size:14px;cursor:pointer;opacity:0;transition:opacity 0.15s;padding:0 2px;';
+    item.addEventListener('mouseenter', () => del.style.opacity = '1');
+    item.addEventListener('mouseleave', () => del.style.opacity = '0');
+    del.onclick = e => {
+      e.stopPropagation();
+      if (!confirm('Delete "' + f.title + '"?')) return;
+      customWorkFiles = customWorkFiles.filter(cf => cf.id !== f.id);
+      saveCustomWF();
+      localStorage.removeItem('habuild_mw_v_' + f.id);
+      if (activeWorkFile === f.id) { activeWorkFile = WORK_FILES[0].id; renderFileContent(activeWorkFile); }
+      renderSidebar();
+    };
+    item.appendChild(del);
+  }
+  return item;
+}
+
+function showNewFileInput(sidebar, newBtn) {
+  if (sidebar.querySelector('.new-file-input-row')) return;
+  newBtn.style.display = 'none';
+  const row = document.createElement('div');
+  row.className = 'new-file-input-row';
+  row.style.cssText = 'padding:6px 16px;display:flex;gap:6px;align-items:center;';
+  const input = document.createElement('input');
+  input.placeholder = 'File name…';
+  input.style.cssText = 'flex:1;background:#0a0a0a;border:1px solid #333;border-radius:4px;padding:5px 8px;font-size:12px;color:#e0e0e0;font-family:inherit;outline:none;';
+  const ok = document.createElement('button');
+  ok.textContent = 'Create';
+  ok.style.cssText = 'background:#e0e0e0;color:#000;border:none;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;';
+  const cancel = () => { row.remove(); newBtn.style.display = ''; };
+  ok.onclick = () => {
+    const title = input.value.trim(); if (!title) return;
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    const id = 'custom_' + slug + '_' + Date.now();
+    const f = { id, title, group:'My Files', sc:'ps-s', filename: slug+'.md', content:'# '+title+'\n\n' };
+    customWorkFiles.push(f); saveCustomWF();
+    row.remove(); newBtn.style.display = '';
+    renderSidebar();
+    activeWorkFile = id;
+    document.getElementById('mwSidebar')?.querySelectorAll('.mw-sidebar-item').forEach(i=>i.classList.remove('active'));
+    renderFileContent(id);
+    if (dirHandle) writeToFile(id, f.content);
+  };
+  input.onkeydown = e => { if(e.key==='Enter') ok.onclick(); if(e.key==='Escape') cancel(); };
+  const x = document.createElement('button');
+  x.innerHTML = '&times;'; x.style.cssText = 'background:none;border:none;color:#555;font-size:16px;cursor:pointer;padding:0;';
+  x.onclick = cancel;
+  row.appendChild(input); row.appendChild(ok); row.appendChild(x);
+  sidebar.insertBefore(row, newBtn);
+  input.focus();
+}
+
 function renderSidebar() {
   const sidebar = document.getElementById('mwSidebar'); if (!sidebar) return;
   sidebar.innerHTML = '';
+  // Built-in groups
   ['Projects','Research'].forEach(group => {
     const files = WORK_FILES.filter(f => f.group === group);
     if (!files.length) return;
     const label = document.createElement('div'); label.className = 'mw-sidebar-group';
     label.textContent = group; sidebar.appendChild(label);
-    files.forEach(f => {
-      const item = document.createElement('div');
-      item.className = 'mw-sidebar-item' + (f.id === activeWorkFile ? ' active' : '');
-      const dot = document.createElement('span'); dot.className = 'mw-sidebar-dot';
-      dot.style.background = SC_COLOR[f.sc] || '#444';
-      const name = document.createElement('span'); name.className = 'mw-sidebar-name';
-      name.textContent = f.title;
-      item.appendChild(dot); item.appendChild(name);
-      item.onclick = () => {
-        activeWorkFile = f.id;
-        sidebar.querySelectorAll('.mw-sidebar-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        renderFileContent(f.id);
-      };
-      sidebar.appendChild(item);
-    });
+    files.forEach(f => sidebar.appendChild(mkSidebarItem(f, false)));
   });
+  // User-created files
+  if (customWorkFiles.length) {
+    const label = document.createElement('div'); label.className = 'mw-sidebar-group';
+    label.textContent = 'My Files'; sidebar.appendChild(label);
+    customWorkFiles.forEach(f => sidebar.appendChild(mkSidebarItem(f, true)));
+  }
+  // New file button
+  const newBtn = document.createElement('button');
+  newBtn.style.cssText = 'display:flex;align-items:center;gap:6px;width:100%;padding:8px 20px;background:none;border:none;color:#555;font-size:12px;cursor:pointer;font-family:inherit;text-align:left;transition:color 0.12s;';
+  newBtn.innerHTML = '<span style="font-size:16px;font-weight:300;line-height:1">+</span> New file';
+  newBtn.onmouseover = () => newBtn.style.color = '#ccc';
+  newBtn.onmouseout  = () => newBtn.style.color = '#555';
+  newBtn.onclick = () => showNewFileInput(sidebar, newBtn);
+  sidebar.appendChild(newBtn);
 }
 
 function renderFileContent(fileId) {
   activeWorkFile = fileId;
   const area = document.getElementById('mwContent'); if (!area) return;
   area.innerHTML = '';
-  const file = WORK_FILES.find(f => f.id === fileId) || WORK_FILES[0];
+  const file = findFile(fileId) || WORK_FILES[0];
   const edited = hasLocalEdits(file.id);
 
   // Actions bar
@@ -1418,7 +1494,8 @@ async function connectFolder() {
 }
 async function writeToFile(fileId, markdown) {
   if (!dirHandle) return;
-  const filename = ID_TO_FILE[fileId]; if (!filename) return;
+  const filename = ID_TO_FILE[fileId] || customWorkFiles.find(f=>f.id===fileId)?.filename;
+  if (!filename) return;
   try {
     const perm = await dirHandle.requestPermission({mode:'readwrite'});
     if (perm!=='granted') return;
