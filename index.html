@@ -645,11 +645,24 @@ function showPicker(body,tagEl,task,sec){
   if(_p){_p.remove();_p=null;return;}
   const p=document.createElement('div');p.className='tag-picker';
 
-  // Built-in + custom tags
-  [...TAGS,...customTags].forEach(opt=>{
+  // Built-in tags (not deletable)
+  TAGS.forEach(opt=>{
     const b=document.createElement('button');b.className=`tp ${opt.c}`;b.textContent=opt.l;
     b.onclick=e=>{e.stopPropagation();task.tag=opt.l==='no tag'?'':opt.l;task.tc=opt.c;p.remove();_p=null;save();render();};
     p.appendChild(b);
+  });
+  // Custom tags (deletable)
+  customTags.forEach((opt,idx)=>{
+    const wrap=document.createElement('span');
+    wrap.style.cssText='display:inline-flex;align-items:center;gap:2px;';
+    const b=document.createElement('button');b.className=`tp ${opt.c}`;b.textContent=opt.l;
+    b.onclick=e=>{e.stopPropagation();task.tag=opt.l;task.tc=opt.c;p.remove();_p=null;save();render();};
+    const x=document.createElement('button');
+    x.innerHTML='&times;';x.title='Delete tag';
+    x.style.cssText='background:none;border:none;font-size:13px;cursor:pointer;color:#666;padding:0 2px;line-height:1;';
+    x.onclick=e=>{e.stopPropagation();customTags.splice(idx,1);saveTags();wrap.remove();};
+    wrap.appendChild(b);wrap.appendChild(x);
+    p.appendChild(wrap);
   });
 
   // Separator
@@ -847,6 +860,7 @@ function renderSide(){
 render();
 renderSide();
 renderChat();
+tryRestoreDir();
 
 // ── Smart parser ──────────────────────────────────────────────────────────────
 const SECTION_RULES = [
@@ -1157,6 +1171,8 @@ const FILE_MAP = {
   '07-tv-app.md':'tv-app','08-cognitive-games.md':'cog-games',
   '09-content-categorisation.md':'content-cat',
 };
+// Reverse map: file id → filename on disk
+const ID_TO_FILE = Object.fromEntries(Object.entries(FILE_MAP).map(([f,id])=>[id,f]));
 
 // ── File helpers ───────────────────────────────────────────────────────────────
 function getFileContent(id) {
@@ -1254,6 +1270,11 @@ function renderFileContent(fileId) {
   saveHint.id = 'mwSaveIndicator'; saveHint.textContent = edited ? 'Edited locally' : '';
   actions.appendChild(saveHint);
   const sp = document.createElement('span'); sp.style.flex = '1'; actions.appendChild(sp);
+  // Connect folder button
+  const connectBtn = document.createElement('button'); connectBtn.className = 'mw-btn';
+  connectBtn.id = 'connectFolderBtn'; connectBtn.onclick = connectFolder;
+  actions.appendChild(connectBtn);
+  updateConnectBtn();
   const dlBtn = document.createElement('button'); dlBtn.className = 'mw-btn';
   dlBtn.textContent = 'Download .md'; dlBtn.onclick = () => downloadFile(file.id);
   actions.appendChild(dlBtn);
@@ -1287,6 +1308,7 @@ function renderFileContent(fileId) {
     if (ind) ind.textContent = '...';
     _saveTimer = setTimeout(() => {
       localStorage.setItem('habuild_mw_v_' + file.id, editable.innerHTML);
+      writeToFile(file.id, htmlToMd(editable));
       if (ind) { ind.classList.add('saved'); ind.textContent = 'Saved'; setTimeout(() => { ind.classList.remove('saved'); ind.textContent = 'Edited locally'; }, 1500); }
     }, 800);
   });
@@ -1304,12 +1326,112 @@ function attachCheckboxHandlers(container, fileId) {
       const li = cb.closest('li');
       if (li) { li.style.color = cb.checked ? '#555' : ''; li.style.textDecoration = cb.checked ? 'line-through' : ''; }
       localStorage.setItem('habuild_mw_v_' + fileId, container.innerHTML);
+      writeToFile(fileId, htmlToMd(container));
       const ind = document.getElementById('mwSaveIndicator');
       if (ind) { ind.classList.add('saved'); ind.textContent = 'Saved'; setTimeout(() => { ind.classList.remove('saved'); ind.textContent = 'Edited locally'; }, 1500); }
     });
     // Prevent native click from toggling the checkbox back after mousedown already handled it
     cb.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); });
   });
+}
+
+// ── HTML → Markdown ───────────────────────────────────────────────────────────
+function htmlToMd(el) {
+  let out = '';
+  function walk(node, ctx) {
+    if (node.nodeType === Node.TEXT_NODE) { out += node.textContent; return; }
+    const tag = node.tagName?.toLowerCase();
+    if (!tag) return;
+    const kids = () => [...node.childNodes].forEach(c => walk(c, ctx));
+    switch(tag) {
+      case 'h1': out+='\n# '; kids(); out+='\n'; break;
+      case 'h2': out+='\n## '; kids(); out+='\n'; break;
+      case 'h3': out+='\n### '; kids(); out+='\n'; break;
+      case 'p':  out+='\n'; kids(); out+='\n'; break;
+      case 'strong': out+='**'; kids(); out+='**'; break;
+      case 'em':     out+='_'; kids(); out+='_'; break;
+      case 'code':   if(ctx==='pre'){kids();}else{out+='`';kids();out+='`';} break;
+      case 'pre':    out+='\n```\n'; [...node.childNodes].forEach(c=>walk(c,'pre')); out+='\n```\n'; break;
+      case 'blockquote': out+='\n> '; kids(); out+='\n'; break;
+      case 'ul': out+='\n'; kids(); break;
+      case 'ol': { let i=1; [...node.children].forEach(li=>{out+=`\n${i}. `;walk(li,'ol');i++;}); break; }
+      case 'li': {
+        const cb = node.querySelector('input[type="checkbox"]');
+        if (cb) {
+          out += cb.checked ? '- [x] ' : '- [ ] ';
+          [...node.childNodes].forEach(c=>{ if(c!==cb) walk(c,ctx); });
+        } else { if(ctx!=='ol') out+='- '; kids(); }
+        out+='\n'; break;
+      }
+      case 'a':  { const h=node.getAttribute('href')||''; out+='['; kids(); out+=`](${h})`; break; }
+      case 'hr': out+='\n---\n'; break;
+      case 'br': out+='\n'; break;
+      case 'table': {
+        [...node.querySelectorAll('tr')].forEach((row,ri)=>{
+          const cells=[...row.querySelectorAll('th,td')];
+          out+='| '+cells.map(c=>c.textContent.trim()).join(' | ')+' |\n';
+          if(ri===0) out+='| '+cells.map(()=>'---').join(' | ')+' |\n';
+        }); break;
+      }
+      default: kids(); break;
+    }
+  }
+  [...el.childNodes].forEach(n=>walk(n,null));
+  return out.replace(/\n{3,}/g,'\n\n').trim()+'\n';
+}
+
+// ── File System Access API ────────────────────────────────────────────────────
+let dirHandle = null;
+
+function openIDB() {
+  return new Promise((res,rej)=>{
+    const req = indexedDB.open('habuild_fs',1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('handles');
+    req.onsuccess = e => res(e.target.result);
+    req.onerror = rej;
+  });
+}
+async function saveDirHandle(h) {
+  const db = await openIDB();
+  return new Promise((res,rej)=>{ const tx=db.transaction('handles','readwrite'); tx.objectStore('handles').put(h,'dir'); tx.oncomplete=res; tx.onerror=rej; });
+}
+async function loadDirHandle() {
+  const db = await openIDB();
+  return new Promise((res,rej)=>{ const tx=db.transaction('handles','readonly'); const r=tx.objectStore('handles').get('dir'); r.onsuccess=e=>res(e.target.result||null); r.onerror=rej; });
+}
+async function tryRestoreDir() {
+  if (!window.showDirectoryPicker) return;
+  try {
+    const h = await loadDirHandle();
+    if (!h) return;
+    const perm = await h.queryPermission({mode:'readwrite'});
+    if (perm==='granted' || perm==='prompt') { dirHandle=h; updateConnectBtn(); }
+  } catch(e) { /* ignore */ }
+}
+async function connectFolder() {
+  if (!window.showDirectoryPicker) { showToast('Not supported in this browser (use Chrome)'); return; }
+  try {
+    const h = await window.showDirectoryPicker({mode:'readwrite'});
+    dirHandle=h; await saveDirHandle(h); updateConnectBtn();
+    showToast('Connected to: '+h.name);
+  } catch(e) { /* user cancelled */ }
+}
+async function writeToFile(fileId, markdown) {
+  if (!dirHandle) return;
+  const filename = ID_TO_FILE[fileId]; if (!filename) return;
+  try {
+    const perm = await dirHandle.requestPermission({mode:'readwrite'});
+    if (perm!=='granted') return;
+    const fh = await dirHandle.getFileHandle(filename,{create:true});
+    const w = await fh.createWritable();
+    await w.write(markdown); await w.close();
+  } catch(e) { console.warn('File write failed:',e); }
+}
+function updateConnectBtn() {
+  const btn = document.getElementById('connectFolderBtn');
+  if (!btn) return;
+  if (dirHandle) { btn.textContent='📁 '+dirHandle.name; btn.style.color='#34d399'; btn.style.borderColor='#1a3a2a'; }
+  else { btn.textContent='Connect folder'; btn.style.color=''; btn.style.borderColor=''; }
 }
 
 function showToast(msg) {
