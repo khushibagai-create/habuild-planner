@@ -446,6 +446,185 @@
     .key-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
     .key-dot.set   { background: #34d399; }
     .key-dot.unset { background: #444; }
+
+    /* ── Granola button ── */
+    .granola-btn {
+      font-size: 11px; background: none; border: 1px solid #222; border-radius: 99px;
+      padding: 3px 10px; cursor: pointer; font-family: inherit; color: #555;
+      display: flex; align-items: center; gap: 5px; white-space: nowrap;
+      transition: all 0.15s; flex-shrink: 0;
+    }
+    .granola-btn:hover { color: #aaa; border-color: #444; }
+    .granola-btn.connected { color: #34d399; border-color: #1a3a2a; }
+    .granola-pulse { width: 6px; height: 6px; border-radius: 50%; background: #34d399; animation: gpulse 2s infinite; flex-shrink: 0; }
+    @keyframes gpulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .granola-menu-btn { display:block;width:100%;text-align:left;background:none;border:none;font-size:13px;padding:8px 12px;cursor:pointer;font-family:inherit;border-radius:4px;transition:background 0.1s; }
+
+    /* ── Feature 1: Emoji Icon ── */
+    .mw-doc-header { position: relative; margin-bottom: 8px; }
+    .mw-doc-header:hover .mw-header-hover-actions { opacity: 1; }
+    .mw-doc-emoji {
+      font-size: 56px; line-height: 1; margin-bottom: 12px; cursor: pointer;
+      display: inline-block; position: relative;
+      user-select: none;
+    }
+    .mw-doc-emoji:hover .mw-emoji-remove { opacity: 1; }
+    .mw-emoji-remove {
+      position: absolute; top: -6px; right: -6px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #2a2a2a; border: 1px solid #3a3a3a;
+      color: #888; font-size: 11px; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; opacity: 0; transition: opacity 0.15s;
+    }
+    .mw-header-hover-actions {
+      display: flex; gap: 8px; align-items: center;
+      opacity: 0; transition: opacity 0.2s; margin-bottom: 10px;
+    }
+    .mw-header-action-btn {
+      font-size: 12px; color: #555; background: none; border: none;
+      cursor: pointer; font-family: inherit; padding: 3px 8px;
+      border-radius: 4px; transition: color 0.15s, background 0.15s;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .mw-header-action-btn:hover { color: #bbb; background: #1a1a1a; }
+
+    /* Emoji picker popup */
+    .mw-emoji-picker {
+      position: fixed; z-index: 1000;
+      background: #181818; border: 1px solid #2a2a2a;
+      border-radius: 10px; padding: 12px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.9);
+      display: grid; grid-template-columns: repeat(8, 32px);
+      gap: 2px; max-width: 300px;
+    }
+    .mw-emoji-picker button {
+      width: 32px; height: 32px; font-size: 20px; background: none; border: none;
+      border-radius: 6px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; line-height: 1;
+      transition: background 0.1s;
+    }
+    .mw-emoji-picker button:hover { background: #2a2a2a; }
+
+    /* ── Feature 2: Cover Image ── */
+    .mw-cover-wrap {
+      position: relative; width: 100%; height: 180px;
+      margin-bottom: 0; overflow: hidden; flex-shrink: 0;
+    }
+    .mw-cover-img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .mw-cover-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0); transition: background 0.2s;
+      display: flex; align-items: flex-end; justify-content: flex-end;
+      padding: 12px 16px; gap: 8px;
+    }
+    .mw-cover-wrap:hover .mw-cover-overlay { background: rgba(0,0,0,0.45); }
+    .mw-cover-wrap:hover .mw-cover-btn { opacity: 1; }
+    .mw-cover-btn {
+      opacity: 0; transition: opacity 0.2s;
+      font-size: 12px; font-weight: 500; font-family: inherit;
+      background: rgba(20,20,20,0.85); color: #e0e0e0;
+      border: 1px solid #3a3a3a; border-radius: 6px;
+      padding: 5px 12px; cursor: pointer;
+    }
+    .mw-cover-btn:hover { background: #2a2a2a; }
+
+    /* Cover URL popup */
+    .mw-cover-popup {
+      position: fixed; z-index: 1000;
+      background: #181818; border: 1px solid #2a2a2a;
+      border-radius: 10px; padding: 16px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.9);
+      width: 320px;
+    }
+    .mw-cover-popup-title { font-size: 12px; color: #888; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .mw-cover-popup input {
+      width: 100%; background: #0a0a0a; border: 1px solid #333;
+      border-radius: 6px; padding: 9px 12px; font-size: 13px;
+      color: #e0e0e0; font-family: inherit; outline: none; margin-bottom: 10px;
+    }
+    .mw-cover-popup input:focus { border-color: #555; }
+    .mw-cover-popup-row { display: flex; gap: 8px; justify-content: flex-end; }
+    .mw-cover-popup-ok {
+      background: #e0e0e0; color: #000; border: none; border-radius: 5px;
+      padding: 7px 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+    .mw-cover-popup-ok:hover { background: #fff; }
+    .mw-cover-popup-cancel {
+      background: none; color: #555; border: none; border-radius: 5px;
+      padding: 7px 12px; font-size: 12px; cursor: pointer; font-family: inherit;
+    }
+    .mw-cover-popup-cancel:hover { color: #aaa; }
+
+    /* ── Feature 3: Slash Command Menu ── */
+    .mw-slash-menu {
+      position: fixed; z-index: 1000;
+      background: #181818; border: 1px solid #2a2a2a;
+      border-radius: 8px; padding: 6px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.9);
+      min-width: 240px; max-height: 320px; overflow-y: auto;
+    }
+    .mw-slash-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 10px; height: 36px; border-radius: 5px;
+      cursor: pointer; transition: background 0.1s;
+    }
+    .mw-slash-item:hover, .mw-slash-item.active { background: #252525; }
+    .mw-slash-icon { font-size: 14px; width: 22px; text-align: center; flex-shrink: 0; }
+    .mw-slash-name { font-size: 13px; color: #d0d0d0; font-weight: 500; }
+    .mw-slash-desc { font-size: 11px; color: #555; margin-left: auto; }
+
+    /* ── Feature 4: Floating Selection Toolbar ── */
+    .mw-sel-toolbar {
+      position: fixed; z-index: 1000;
+      background: #181818; border: 1px solid #333;
+      border-radius: 6px; padding: 4px 8px;
+      display: flex; align-items: center; gap: 2px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+      pointer-events: auto;
+    }
+    .mw-sel-btn {
+      background: none; border: none; color: #bbb; font-size: 13px;
+      font-family: inherit; cursor: pointer; padding: 4px 7px;
+      border-radius: 4px; transition: background 0.1s, color 0.1s;
+      line-height: 1; font-weight: 600;
+    }
+    .mw-sel-btn:hover { background: #2a2a2a; color: #fff; }
+    .mw-sel-sep { width: 1px; height: 16px; background: #2a2a2a; margin: 0 2px; flex-shrink: 0; }
+
+    /* ── Feature 5: Command Palette ── */
+    .mw-cmdpal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 2000;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 18vh;
+    }
+    .mw-cmdpal-modal {
+      background: #141414; border: 1px solid #2a2a2a;
+      border-radius: 12px; width: 560px; max-width: 90vw;
+      overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.95);
+    }
+    .mw-cmdpal-input {
+      width: 100%; background: none; border: none; border-bottom: 1px solid #1e1e1e;
+      padding: 18px 22px; font-size: 16px; color: #e8e8e8;
+      font-family: inherit; outline: none;
+    }
+    .mw-cmdpal-input::placeholder { color: #3a3a3a; }
+    .mw-cmdpal-list { max-height: 360px; overflow-y: auto; padding: 6px; }
+    .mw-cmdpal-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; border-radius: 7px; cursor: pointer;
+      transition: background 0.1s;
+    }
+    .mw-cmdpal-item.active { background: #1e1e1e; }
+    .mw-cmdpal-item:hover { background: #1e1e1e; }
+    .mw-cmdpal-emoji { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+    .mw-cmdpal-title { font-size: 14px; color: #e0e0e0; flex: 1; }
+    .mw-cmdpal-group { font-size: 11px; color: #444; }
+    .mw-cmdpal-empty { font-size: 13px; color: #444; text-align: center; padding: 28px; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/marked@13/marked.min.js"></script>
 </head>
@@ -466,6 +645,7 @@
   <div class="progress-row">
     <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
     <div class="prog-txt" id="pTxt">0 / 0</div>
+    <button class="granola-btn" id="granolaBtn" onclick="toggleGranola()">Connect Granola</button>
   </div>
 
   <div class="tab-bar">
@@ -861,6 +1041,7 @@ render();
 renderSide();
 renderChat();
 tryRestoreDir();
+tryRestoreGranola();
 
 // ── Smart parser ──────────────────────────────────────────────────────────────
 const SECTION_RULES = [
@@ -1236,15 +1417,58 @@ function renderMyWork() {
   renderFileContent(activeWorkFile || WORK_FILES[0].id);
 }
 
+// ── Feature helpers ──────────────────────────────────────────────────────────
+function getFileEmoji(fileId) { return localStorage.getItem('habuild_mw_icon_' + fileId) || ''; }
+function setFileEmoji(fileId, emoji) {
+  if (emoji) localStorage.setItem('habuild_mw_icon_' + fileId, emoji);
+  else localStorage.removeItem('habuild_mw_icon_' + fileId);
+}
+function getFileCover(fileId) { return localStorage.getItem('habuild_mw_cover_' + fileId) || ''; }
+function setFileCover(fileId, url) {
+  if (url) localStorage.setItem('habuild_mw_cover_' + fileId, url);
+  else localStorage.removeItem('habuild_mw_cover_' + fileId);
+}
+
+const EMOJI_LIST = [
+  '📝','📄','📋','📊','📈','📉','🗂️','📁','📂','🗃️',
+  '✅','☑️','🔲','📌','📍','🔖','🏷️','💡','🔍','🔎',
+  '⚡','🚀','🎯','🎪','🎨','🎭','🏆','🥇','🌟','✨',
+  '💎','🔑','🔐','🛠️','⚙️','🔧','📡','💻','📱','🖥️',
+  '🌱','🌿','🍀','🌊','🔥','💧','🌙','☀️','🌈','🎵',
+];
+
+const SLASH_COMMANDS = [
+  { id:'p',    icon:'📝', name:'Text',       desc:'Plain paragraph',    tag:'p' },
+  { id:'h1',   icon:'H1', name:'Heading 1',  desc:'Large section title',tag:'h1' },
+  { id:'h2',   icon:'H2', name:'Heading 2',  desc:'Medium section',     tag:'h2' },
+  { id:'h3',   icon:'H3', name:'Heading 3',  desc:'Small section',      tag:'h3' },
+  { id:'todo', icon:'☑',  name:'To-do',      desc:'Checkbox list item', tag:'todo' },
+  { id:'ul',   icon:'•',  name:'Bullet list',desc:'Unordered list',     tag:'ul' },
+  { id:'ol',   icon:'1.', name:'Numbered',   desc:'Ordered list',       tag:'ol' },
+  { id:'bq',   icon:'"',  name:'Quote',      desc:'Block quote',        tag:'blockquote' },
+  { id:'code', icon:'<>',  name:'Code',       desc:'Code block',         tag:'pre' },
+  { id:'hr',   icon:'—',  name:'Divider',    desc:'Horizontal rule',    tag:'hr' },
+];
+
 function mkSidebarItem(f, deletable) {
   const item = document.createElement('div');
   item.className = 'mw-sidebar-item' + (f.id === activeWorkFile ? ' active' : '');
   item.style.position = 'relative';
-  const dot = document.createElement('span'); dot.className = 'mw-sidebar-dot';
-  dot.style.background = SC_COLOR[f.sc] || '#444';
+  // Show emoji if set, otherwise colored dot
+  const emoji = getFileEmoji(f.id);
+  if (emoji) {
+    const emojiSpan = document.createElement('span');
+    emojiSpan.textContent = emoji;
+    emojiSpan.style.cssText = 'font-size:14px;line-height:1;flex-shrink:0;';
+    item.appendChild(emojiSpan);
+  } else {
+    const dot = document.createElement('span'); dot.className = 'mw-sidebar-dot';
+    dot.style.background = SC_COLOR[f.sc] || '#444';
+    item.appendChild(dot);
+  }
   const name = document.createElement('span'); name.className = 'mw-sidebar-name';
   name.textContent = f.title;
-  item.appendChild(dot); item.appendChild(name);
+  item.appendChild(name);
   item.onclick = () => {
     activeWorkFile = f.id;
     document.getElementById('mwSidebar').querySelectorAll('.mw-sidebar-item').forEach(i => i.classList.remove('active'));
@@ -1340,7 +1564,67 @@ function renderFileContent(fileId) {
   const file = findFile(fileId) || WORK_FILES[0];
   const edited = hasLocalEdits(file.id);
 
-  // Actions bar
+  // ── Cover image banner (Feature 2) ──
+  const coverUrl = getFileCover(file.id);
+  if (coverUrl) {
+    const coverWrap = document.createElement('div');
+    coverWrap.className = 'mw-cover-wrap';
+    coverWrap.style.margin = '-40px -56px 32px';
+    const img = document.createElement('img');
+    img.className = 'mw-cover-img'; img.src = coverUrl; img.alt = '';
+    const overlay = document.createElement('div');
+    overlay.className = 'mw-cover-overlay';
+    const changeBtn = document.createElement('button');
+    changeBtn.className = 'mw-cover-btn'; changeBtn.textContent = 'Change cover';
+    changeBtn.onclick = e => { e.stopPropagation(); openCoverPopup(file.id, changeBtn); };
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'mw-cover-btn'; removeBtn.textContent = 'Remove cover';
+    removeBtn.onclick = () => { setFileCover(file.id, ''); renderFileContent(file.id); };
+    overlay.appendChild(changeBtn); overlay.appendChild(removeBtn);
+    coverWrap.appendChild(img); coverWrap.appendChild(overlay);
+    area.appendChild(coverWrap);
+  }
+
+  // ── Doc header with emoji + hover actions (Features 1 & 2) ──
+  const docHeader = document.createElement('div');
+  docHeader.className = 'mw-doc-header';
+
+  const emoji = getFileEmoji(file.id);
+  if (emoji) {
+    const emojiEl = document.createElement('div');
+    emojiEl.className = 'mw-doc-emoji';
+    emojiEl.textContent = emoji;
+    emojiEl.title = 'Click to change emoji';
+    emojiEl.onclick = e => { e.stopPropagation(); openEmojiPicker(file.id, emojiEl); };
+    const removeEmojiBtn = document.createElement('div');
+    removeEmojiBtn.className = 'mw-emoji-remove'; removeEmojiBtn.textContent = '×';
+    removeEmojiBtn.title = 'Remove icon';
+    removeEmojiBtn.onclick = e => { e.stopPropagation(); setFileEmoji(file.id, ''); renderSidebar(); renderFileContent(file.id); };
+    emojiEl.appendChild(removeEmojiBtn);
+    docHeader.appendChild(emojiEl);
+  }
+
+  // Hover action bar (Add icon / Add cover)
+  const hoverActions = document.createElement('div');
+  hoverActions.className = 'mw-header-hover-actions';
+  if (!emoji) {
+    const addIconBtn = document.createElement('button');
+    addIconBtn.className = 'mw-header-action-btn';
+    addIconBtn.innerHTML = '☺ Add icon';
+    addIconBtn.onclick = e => { e.stopPropagation(); openEmojiPicker(file.id, addIconBtn); };
+    hoverActions.appendChild(addIconBtn);
+  }
+  if (!coverUrl) {
+    const addCoverBtn = document.createElement('button');
+    addCoverBtn.className = 'mw-header-action-btn';
+    addCoverBtn.innerHTML = '🖼 Add cover';
+    addCoverBtn.onclick = e => { e.stopPropagation(); openCoverPopup(file.id, addCoverBtn); };
+    hoverActions.appendChild(addCoverBtn);
+  }
+  docHeader.appendChild(hoverActions);
+  area.appendChild(docHeader);
+
+  // ── Actions bar ──
   const actions = document.createElement('div'); actions.className = 'mw-file-actions';
   const saveHint = document.createElement('span'); saveHint.className = 'mw-save-indicator';
   saveHint.id = 'mwSaveIndicator'; saveHint.textContent = edited ? 'Edited locally' : '';
@@ -1410,6 +1694,173 @@ function attachCheckboxHandlers(container, fileId) {
     cb.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); });
   });
 }
+
+// ── Granola integration ────────────────────────────────────────────────────────
+let granolaDirHandle = null;
+const GRANOLA_KEY = 'habuild_granola_processed';
+
+async function saveGranolaHandle(h) {
+  const db = await openIDB();
+  return new Promise((res,rej) => { const tx=db.transaction('handles','readwrite'); tx.objectStore('handles').put(h,'granola'); tx.oncomplete=res; tx.onerror=rej; });
+}
+async function loadGranolaHandle() {
+  const db = await openIDB();
+  return new Promise((res,rej) => { const tx=db.transaction('handles','readonly'); const r=tx.objectStore('handles').get('granola'); r.onsuccess=e=>res(e.target.result||null); r.onerror=rej; });
+}
+async function tryRestoreGranola() {
+  if (!window.showDirectoryPicker) return;
+  try {
+    const h = await loadGranolaHandle(); if (!h) return;
+    const perm = await h.queryPermission({mode:'read'});
+    if (perm==='granted'||perm==='prompt') { granolaDirHandle=h; updateGranolaBtn(); }
+  } catch(e) {}
+}
+
+function updateGranolaBtn() {
+  const btn = document.getElementById('granolaBtn'); if (!btn) return;
+  if (granolaDirHandle) {
+    btn.innerHTML = '<span class="granola-pulse"></span> Granola';
+    btn.classList.add('connected');
+    btn.title = 'Click to sync or disconnect';
+  } else {
+    btn.innerHTML = 'Connect Granola';
+    btn.classList.remove('connected');
+    btn.title = 'Connect your Granola notes folder';
+  }
+}
+
+function toggleGranola() {
+  if (granolaDirHandle) showGranolaMenu();
+  else connectGranola();
+}
+
+function showGranolaMenu() {
+  const existing = document.getElementById('granolaMenu');
+  if (existing) { existing.remove(); return; }
+  const btn = document.getElementById('granolaBtn');
+  const rect = btn.getBoundingClientRect();
+  const menu = document.createElement('div');
+  menu.id = 'granolaMenu';
+  menu.style.cssText = `position:fixed;top:${rect.bottom+6}px;left:${rect.left}px;background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:6px;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,0.8);min-width:160px;`;
+
+  const mkBtn = (label, color) => {
+    const b = document.createElement('button');
+    b.textContent = label; b.className = 'granola-menu-btn';
+    b.style.color = color || '#e0e0e0';
+    b.onmouseover = () => b.style.background = '#1a1a1a';
+    b.onmouseout  = () => b.style.background = 'none';
+    return b;
+  };
+
+  const syncBtn = mkBtn('Sync now');
+  syncBtn.onclick = () => { menu.remove(); syncGranola(true); };
+  menu.appendChild(syncBtn);
+
+  const last = localStorage.getItem('habuild_granola_last');
+  if (last) {
+    const info = document.createElement('div');
+    info.style.cssText = 'font-size:10px;color:#555;padding:2px 12px 6px;';
+    info.textContent = 'Synced ' + new Date(+last).toLocaleTimeString();
+    menu.appendChild(info);
+  }
+
+  const sep = document.createElement('div');
+  sep.style.cssText = 'height:1px;background:#1e1e1e;margin:4px 0;';
+  menu.appendChild(sep);
+
+  const disconnBtn = mkBtn('Disconnect', '#666');
+  disconnBtn.onmouseover = () => { disconnBtn.style.background='#1a1a1a'; disconnBtn.style.color='#e05050'; };
+  disconnBtn.onmouseout  = () => { disconnBtn.style.background='none';    disconnBtn.style.color='#666'; };
+  disconnBtn.onclick = async () => {
+    menu.remove(); granolaDirHandle = null;
+    const db = await openIDB();
+    const tx = db.transaction('handles','readwrite'); tx.objectStore('handles').delete('granola');
+    updateGranolaBtn(); showToast('Granola disconnected');
+  };
+  menu.appendChild(disconnBtn);
+
+  document.body.appendChild(menu);
+  setTimeout(() => document.addEventListener('click', () => document.getElementById('granolaMenu')?.remove(), {once:true}), 0);
+}
+
+async function connectGranola() {
+  if (!window.showDirectoryPicker) { showToast('Not supported — use Chrome'); return; }
+  if (!apiKey) { showToast('Set your API key first (⚙)'); openSettings(); return; }
+  try {
+    const h = await window.showDirectoryPicker({mode:'read'});
+    granolaDirHandle = h;
+    await saveGranolaHandle(h);
+    updateGranolaBtn();
+    showToast('Connected: ' + h.name);
+    syncGranola(true);
+  } catch(e) {}
+}
+
+async function syncGranola(manual=false) {
+  if (!granolaDirHandle || !apiKey) return;
+  const processed = JSON.parse(localStorage.getItem(GRANOLA_KEY)||'{}');
+  const toProcess = [];
+  try {
+    const perm = await granolaDirHandle.requestPermission({mode:'read'});
+    if (perm !== 'granted') return;
+    for await (const [name, handle] of granolaDirHandle.entries()) {
+      if (handle.kind !== 'file') continue;
+      if (!/\.(md|txt|json)$/i.test(name)) continue;
+      const file = await handle.getFile();
+      const key = name + '_' + file.lastModified;
+      if (!processed[key]) toProcess.push({name, handle, key});
+    }
+    if (!toProcess.length) { if (manual) showToast('No new meeting notes'); return; }
+    showToast('Reading ' + toProcess.length + ' new note' + (toProcess.length>1?'s':'') + '…');
+    let added = 0;
+    for (const {name, handle, key} of toProcess) {
+      const file = await handle.getFile();
+      const content = await file.text();
+      if (content.trim().length < 30) { processed[key] = Date.now(); continue; }
+      const tasks = await extractTasksFromNotes(content, name);
+      tasks.forEach(t => {
+        const sec = data.find(s=>s.id===t.secId) || data.find(s=>s.id==='focus');
+        if (!sec) return;
+        sec.tasks.push({id:sec.id+'_gn_'+Date.now()+'_'+Math.random().toString(36).slice(2), label:t.label, tag:t.tag||'', tc:t.tc||'t-none', done:false});
+        added++;
+      });
+      processed[key] = Date.now();
+    }
+    localStorage.setItem(GRANOLA_KEY, JSON.stringify(processed));
+    localStorage.setItem('habuild_granola_last', Date.now().toString());
+    save(); render();
+    showToast(added ? 'Added ' + added + ' task' + (added>1?'s':'') + ' from meeting notes' : 'No action items found');
+  } catch(e) { console.warn('Granola sync error:', e); if (manual) showToast('Sync failed — check folder access'); }
+}
+
+async function extractTasksFromNotes(content, filename) {
+  if (!apiKey) return [];
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 800,
+        system: `Extract action items for Khushi (PM at Habuild, an India yoga habit app) from meeting notes.
+Return ONLY a JSON array, no markdown, no explanation.
+Each item: {"label":"concise actionable task","secId":"coord|data|calls|focus","tag":"","tc":"t-none"}
+Sections: coord=talking to/following up with people, data=metrics/data analysis, calls=user interviews/research, focus=reading/writing/planning
+Tags: "14-day trial"→t-data | "A/B testing"→t-coord | "TV app"→t-coord | "cognitive games"→t-focus | "research"→t-calls | "notifications"→t-focus | "homescreen"→t-coord | else ""→t-none
+Only extract tasks assigned to or owned by Khushi. Return [] if no clear action items. Keep labels under 100 chars.`,
+        messages: [{role:'user', content:'Notes from "'+filename+'":\n\n'+content.slice(0,4000)}]
+      })
+    });
+    if (!res.ok) return [];
+    const j = await res.json();
+    const raw = j.content[0].text.trim().replace(/^```json?\s*/i,'').replace(/```\s*$/,'').trim();
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch(e) { return []; }
+}
+
+// Auto-poll every 3 minutes
+setInterval(() => { if (granolaDirHandle && apiKey) syncGranola(); }, 3 * 60 * 1000);
 
 // ── HTML → Markdown ───────────────────────────────────────────────────────────
 function htmlToMd(el) {
@@ -1518,6 +1969,591 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2000);
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// Feature 1: Emoji Picker
+// ═══════════════════════════════════════════════════════════════════
+let _emojiPickerEl = null;
+
+function openEmojiPicker(fileId, anchorEl) {
+  // Close existing picker
+  if (_emojiPickerEl) { _emojiPickerEl.remove(); _emojiPickerEl = null; return; }
+
+  const picker = document.createElement('div');
+  picker.className = 'mw-emoji-picker';
+  _emojiPickerEl = picker;
+
+  EMOJI_LIST.forEach(e => {
+    const btn = document.createElement('button');
+    btn.textContent = e;
+    btn.title = e;
+    btn.onclick = ev => {
+      ev.stopPropagation();
+      setFileEmoji(fileId, e);
+      picker.remove(); _emojiPickerEl = null;
+      renderSidebar();
+      renderFileContent(fileId);
+    };
+    picker.appendChild(btn);
+  });
+
+  document.body.appendChild(picker);
+
+  // Position near anchor
+  const rect = anchorEl.getBoundingClientRect();
+  const pw = picker.offsetWidth || 280;
+  const ph = picker.offsetHeight || 200;
+  let left = rect.left;
+  let top = rect.bottom + 6;
+  if (left + pw > window.innerWidth - 12) left = window.innerWidth - pw - 12;
+  if (top + ph > window.innerHeight - 12) top = rect.top - ph - 6;
+  picker.style.left = left + 'px';
+  picker.style.top = top + 'px';
+
+  setTimeout(() => {
+    document.addEventListener('click', function closePickerHandler(ev) {
+      if (!picker.contains(ev.target)) {
+        picker.remove(); _emojiPickerEl = null;
+        document.removeEventListener('click', closePickerHandler);
+      }
+    });
+  }, 0);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Feature 2: Cover Image Popup
+// ═══════════════════════════════════════════════════════════════════
+let _coverPopupEl = null;
+
+function openCoverPopup(fileId, anchorEl) {
+  if (_coverPopupEl) { _coverPopupEl.remove(); _coverPopupEl = null; return; }
+
+  const popup = document.createElement('div');
+  popup.className = 'mw-cover-popup';
+  _coverPopupEl = popup;
+
+  const title = document.createElement('div');
+  title.className = 'mw-cover-popup-title';
+  title.textContent = 'Cover image URL';
+
+  const input = document.createElement('input');
+  input.placeholder = 'https://example.com/image.jpg';
+  input.value = getFileCover(fileId);
+
+  const row = document.createElement('div');
+  row.className = 'mw-cover-popup-row';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'mw-cover-popup-cancel';
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.onclick = () => { popup.remove(); _coverPopupEl = null; };
+
+  const okBtn = document.createElement('button');
+  okBtn.className = 'mw-cover-popup-ok';
+  okBtn.textContent = 'Set cover';
+  okBtn.onclick = () => {
+    const url = input.value.trim();
+    setFileCover(fileId, url);
+    popup.remove(); _coverPopupEl = null;
+    renderFileContent(fileId);
+  };
+
+  input.onkeydown = e => {
+    e.stopPropagation();
+    if (e.key === 'Enter') okBtn.onclick();
+    if (e.key === 'Escape') cancelBtn.onclick();
+  };
+
+  row.appendChild(cancelBtn); row.appendChild(okBtn);
+  popup.appendChild(title); popup.appendChild(input); popup.appendChild(row);
+  document.body.appendChild(popup);
+
+  // Position near anchor
+  const rect = anchorEl.getBoundingClientRect();
+  const pw = 320;
+  const ph = popup.offsetHeight || 130;
+  let left = rect.left;
+  let top = rect.bottom + 6;
+  if (left + pw > window.innerWidth - 12) left = window.innerWidth - pw - 12;
+  if (top + ph > window.innerHeight - 12) top = rect.top - ph - 6;
+  popup.style.left = Math.max(12, left) + 'px';
+  popup.style.top = Math.max(12, top) + 'px';
+
+  setTimeout(() => input.focus(), 0);
+
+  setTimeout(() => {
+    document.addEventListener('click', function closeCoverHandler(ev) {
+      if (!popup.contains(ev.target) && ev.target !== anchorEl) {
+        popup.remove(); _coverPopupEl = null;
+        document.removeEventListener('click', closeCoverHandler);
+      }
+    });
+  }, 0);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Feature 3: Slash Command Menu
+// ═══════════════════════════════════════════════════════════════════
+let _slashMenuEl = null;
+let _slashQuery = '';
+let _slashRange = null;
+let _slashActiveIdx = 0;
+
+function getFilteredCommands(query) {
+  if (!query) return SLASH_COMMANDS;
+  const q = query.toLowerCase();
+  return SLASH_COMMANDS.filter(c =>
+    c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.tag.toLowerCase().includes(q)
+  );
+}
+
+function closeSlashMenu() {
+  if (_slashMenuEl) { _slashMenuEl.remove(); _slashMenuEl = null; }
+  _slashQuery = '';
+  _slashRange = null;
+  _slashActiveIdx = 0;
+}
+
+function openSlashMenu(rect) {
+  closeSlashMenu();
+  const menu = document.createElement('div');
+  menu.className = 'mw-slash-menu';
+  _slashMenuEl = menu;
+  document.body.appendChild(menu);
+  positionSlashMenu(rect);
+  renderSlashItems();
+}
+
+function positionSlashMenu(rect) {
+  if (!_slashMenuEl) return;
+  const mh = _slashMenuEl.offsetHeight || 220;
+  let top = rect.bottom + window.scrollY + 4;
+  if (rect.bottom + mh + 20 > window.innerHeight) top = rect.top + window.scrollY - mh - 4;
+  let left = rect.left + window.scrollX;
+  if (left + 260 > window.innerWidth - 12) left = window.innerWidth - 272;
+  _slashMenuEl.style.left = Math.max(12, left) + 'px';
+  _slashMenuEl.style.top = top + 'px';
+}
+
+function renderSlashItems() {
+  if (!_slashMenuEl) return;
+  _slashMenuEl.innerHTML = '';
+  const cmds = getFilteredCommands(_slashQuery);
+  if (!cmds.length) { closeSlashMenu(); return; }
+  if (_slashActiveIdx >= cmds.length) _slashActiveIdx = 0;
+  cmds.forEach((cmd, i) => {
+    const item = document.createElement('div');
+    item.className = 'mw-slash-item' + (i === _slashActiveIdx ? ' active' : '');
+    item.innerHTML = `<span class="mw-slash-icon">${cmd.icon}</span><span class="mw-slash-name">${cmd.name}</span><span class="mw-slash-desc">${cmd.desc}</span>`;
+    item.onmouseenter = () => { _slashActiveIdx = i; renderSlashItems(); };
+    item.onclick = () => applySlashCommand(cmd);
+    _slashMenuEl.appendChild(item);
+  });
+}
+
+function applySlashCommand(cmd) {
+  closeSlashMenu();
+  const editable = document.querySelector('.mw-editable');
+  if (!editable) return;
+  editable.focus();
+
+  // Delete the /query text
+  if (_slashRange) {
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(_slashRange);
+  }
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  const range = sel.getRangeAt(0);
+  // Walk backward from cursor to find the / character
+  const textNode = range.startContainer;
+  if (textNode.nodeType === Node.TEXT_NODE) {
+    const text = textNode.textContent;
+    const cursorPos = range.startOffset;
+    // Find the slash position
+    const slashPos = text.lastIndexOf('/', cursorPos);
+    if (slashPos !== -1) {
+      const delRange = document.createRange();
+      delRange.setStart(textNode, slashPos);
+      delRange.setEnd(textNode, cursorPos);
+      delRange.deleteContents();
+    }
+  }
+
+  // Insert the block element
+  let newEl = null;
+  switch(cmd.tag) {
+    case 'p':
+      newEl = document.createElement('p');
+      newEl.innerHTML = '<br>';
+      break;
+    case 'h1': case 'h2': case 'h3':
+      newEl = document.createElement(cmd.tag);
+      newEl.innerHTML = '<br>';
+      break;
+    case 'todo':
+      newEl = document.createElement('ul');
+      const li = document.createElement('li');
+      li.innerHTML = '<input type="checkbox"> ';
+      newEl.appendChild(li);
+      break;
+    case 'ul':
+      newEl = document.createElement('ul');
+      const ulli = document.createElement('li');
+      ulli.innerHTML = '<br>';
+      newEl.appendChild(ulli);
+      break;
+    case 'ol':
+      newEl = document.createElement('ol');
+      const olli = document.createElement('li');
+      olli.innerHTML = '<br>';
+      newEl.appendChild(olli);
+      break;
+    case 'blockquote':
+      newEl = document.createElement('blockquote');
+      newEl.innerHTML = '<br>';
+      break;
+    case 'pre':
+      newEl = document.createElement('pre');
+      const code = document.createElement('code');
+      code.innerHTML = '<br>';
+      newEl.appendChild(code);
+      break;
+    case 'hr':
+      newEl = document.createElement('hr');
+      break;
+    default:
+      newEl = document.createElement('p');
+      newEl.innerHTML = '<br>';
+  }
+
+  const updSel = window.getSelection();
+  if (updSel.rangeCount) {
+    const r = updSel.getRangeAt(0);
+    // Find block-level parent to insert after
+    let node = r.startContainer;
+    while (node && node !== editable && node.parentNode !== editable) node = node.parentNode;
+    if (node && node !== editable) {
+      node.parentNode.insertBefore(newEl, node.nextSibling);
+    } else {
+      editable.appendChild(newEl);
+    }
+    // Place cursor inside new element
+    const newRange = document.createRange();
+    if (cmd.tag === 'hr') {
+      const p = document.createElement('p'); p.innerHTML = '<br>';
+      newEl.insertAdjacentElement('afterend', p);
+      newRange.setStart(p, 0); newRange.collapse(true);
+    } else if (cmd.tag === 'todo' || cmd.tag === 'ul') {
+      const liNode = newEl.querySelector('li');
+      newRange.selectNodeContents(liNode); newRange.collapse(false);
+    } else if (cmd.tag === 'ol') {
+      const liNode = newEl.querySelector('li');
+      newRange.selectNodeContents(liNode); newRange.collapse(false);
+    } else if (cmd.tag === 'pre') {
+      const codeNode = newEl.querySelector('code');
+      newRange.selectNodeContents(codeNode); newRange.collapse(false);
+    } else {
+      newRange.selectNodeContents(newEl); newRange.collapse(false);
+    }
+    updSel.removeAllRanges(); updSel.addRange(newRange);
+  }
+
+  editable.dispatchEvent(new Event('input', {bubbles:true}));
+  if (cmd.tag === 'todo') attachCheckboxHandlers(editable, activeWorkFile);
+}
+
+// Hook slash command into the editable div (called after rendering)
+function initSlashMenu(editable) {
+  editable.addEventListener('keydown', e => {
+    if (_slashMenuEl) {
+      const cmds = getFilteredCommands(_slashQuery);
+      if (e.key === 'ArrowDown') {
+        e.preventDefault(); _slashActiveIdx = (_slashActiveIdx + 1) % cmds.length;
+        renderSlashItems(); return;
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault(); _slashActiveIdx = (_slashActiveIdx - 1 + cmds.length) % cmds.length;
+        renderSlashItems(); return;
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (cmds[_slashActiveIdx]) applySlashCommand(cmds[_slashActiveIdx]);
+        return;
+      }
+      if (e.key === 'Escape') { closeSlashMenu(); return; }
+    }
+  });
+
+  editable.addEventListener('input', () => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) { closeSlashMenu(); return; }
+    const range = sel.getRangeAt(0);
+    const textNode = range.startContainer;
+    if (textNode.nodeType !== Node.TEXT_NODE) { closeSlashMenu(); return; }
+    const text = textNode.textContent;
+    const pos = range.startOffset;
+    // Find the last slash before the cursor on this line
+    const lineText = text.substring(0, pos);
+    const slashIdx = lineText.lastIndexOf('/');
+    if (slashIdx === -1) { closeSlashMenu(); return; }
+    // Only handle slash at start of word (preceded by space/newline or start)
+    const before = lineText[slashIdx - 1];
+    if (before && before !== ' ' && before !== '\n') { closeSlashMenu(); return; }
+    _slashQuery = lineText.substring(slashIdx + 1);
+    // If query has spaces, close (not a command)
+    if (_slashQuery.includes(' ')) { closeSlashMenu(); return; }
+    const rect = range.getBoundingClientRect();
+    if (!_slashMenuEl) {
+      _slashRange = range.cloneRange();
+      openSlashMenu(rect);
+    } else {
+      _slashRange = range.cloneRange();
+      renderSlashItems();
+      positionSlashMenu(rect);
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Feature 4: Floating Selection Toolbar
+// ═══════════════════════════════════════════════════════════════════
+let _selToolbar = null;
+
+function createSelToolbar() {
+  if (_selToolbar) return;
+  const tb = document.createElement('div');
+  tb.className = 'mw-sel-toolbar';
+  tb.style.display = 'none';
+  _selToolbar = tb;
+
+  const buttons = [
+    { label: 'B', title: 'Bold', style: 'font-weight:700;', action: () => document.execCommand('bold') },
+    { label: 'I', title: 'Italic', style: 'font-style:italic;', action: () => document.execCommand('italic') },
+    { label: 'S', title: 'Strikethrough', style: 'text-decoration:line-through;', action: () => document.execCommand('strikeThrough') },
+    null, // separator
+    { label: '&lt;/&gt;', title: 'Inline code', style: 'font-family:monospace;font-size:11px;', action: wrapSelectionInCode },
+    { label: '🔗', title: 'Link', style: 'font-size:14px;', action: wrapSelectionInLink },
+  ];
+
+  buttons.forEach(btn => {
+    if (btn === null) {
+      const sep = document.createElement('div'); sep.className = 'mw-sel-sep';
+      tb.appendChild(sep); return;
+    }
+    const b = document.createElement('button');
+    b.className = 'mw-sel-btn'; b.title = btn.title;
+    b.innerHTML = btn.label; b.style.cssText += btn.style;
+    b.onmousedown = e => { e.preventDefault(); btn.action(); };
+    tb.appendChild(b);
+  });
+
+  document.body.appendChild(tb);
+}
+
+function wrapSelectionInCode() {
+  const sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  const code = document.createElement('code');
+  try { range.surroundContents(code); } catch(e) {
+    // surroundContents fails for cross-element selections — fallback
+    const frag = range.extractContents();
+    code.appendChild(frag); range.insertNode(code);
+  }
+  sel.removeAllRanges();
+  const newRange = document.createRange();
+  newRange.selectNodeContents(code); newRange.collapse(false);
+  sel.addRange(newRange);
+  const ed = document.querySelector('.mw-editable');
+  if (ed) ed.dispatchEvent(new Event('input', {bubbles:true}));
+}
+
+function wrapSelectionInLink() {
+  const url = prompt('Enter URL:', 'https://');
+  if (!url) return;
+  const sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  const a = document.createElement('a');
+  a.href = url; a.target = '_blank';
+  try { range.surroundContents(a); } catch(e) {
+    const frag = range.extractContents();
+    a.appendChild(frag); range.insertNode(a);
+  }
+  sel.removeAllRanges();
+  const ed = document.querySelector('.mw-editable');
+  if (ed) ed.dispatchEvent(new Event('input', {bubbles:true}));
+}
+
+function updateSelToolbar() {
+  if (!_selToolbar) return;
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !sel.rangeCount) {
+    _selToolbar.style.display = 'none'; return;
+  }
+  // Check selection is inside .mw-editable
+  const editable = document.querySelector('.mw-editable');
+  if (!editable) { _selToolbar.style.display = 'none'; return; }
+  const anchorNode = sel.anchorNode;
+  if (!editable.contains(anchorNode)) { _selToolbar.style.display = 'none'; return; }
+
+  const range = sel.getRangeAt(0);
+  const rect = range.getBoundingClientRect();
+  if (!rect.width && !rect.height) { _selToolbar.style.display = 'none'; return; }
+
+  _selToolbar.style.display = 'flex';
+  const tw = _selToolbar.offsetWidth || 200;
+  let left = rect.left + (rect.width / 2) - (tw / 2);
+  let top = rect.top + window.scrollY - _selToolbar.offsetHeight - 10;
+  if (top < 4) top = rect.bottom + window.scrollY + 6;
+  if (left < 8) left = 8;
+  if (left + tw > window.innerWidth - 8) left = window.innerWidth - tw - 8;
+  _selToolbar.style.left = left + 'px';
+  _selToolbar.style.top = top + 'px';
+}
+
+document.addEventListener('selectionchange', () => {
+  // Small delay so selection is finalized
+  setTimeout(updateSelToolbar, 10);
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Feature 5: Command Palette (Cmd+K)
+// ═══════════════════════════════════════════════════════════════════
+let _cmdPalOpen = false;
+let _cmdPalActiveIdx = 0;
+
+function openCommandPalette() {
+  if (_cmdPalOpen) { closeCommandPalette(); return; }
+  _cmdPalOpen = true;
+  _cmdPalActiveIdx = 0;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'mw-cmdpal-overlay';
+  overlay.id = 'mwCmdPal';
+  overlay.onclick = e => { if (e.target === overlay) closeCommandPalette(); };
+
+  const modal = document.createElement('div');
+  modal.className = 'mw-cmdpal-modal';
+  modal.onclick = e => e.stopPropagation();
+
+  const input = document.createElement('input');
+  input.className = 'mw-cmdpal-input';
+  input.placeholder = 'Search documents...';
+  input.setAttribute('autocomplete', 'off');
+
+  const list = document.createElement('div');
+  list.className = 'mw-cmdpal-list';
+  list.id = 'mwCmdPalList';
+
+  modal.appendChild(input); modal.appendChild(list);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  renderCmdPalList('', list);
+
+  setTimeout(() => input.focus(), 0);
+
+  input.addEventListener('input', () => {
+    _cmdPalActiveIdx = 0;
+    renderCmdPalList(input.value.trim(), list);
+  });
+
+  input.addEventListener('keydown', e => {
+    const items = list.querySelectorAll('.mw-cmdpal-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      _cmdPalActiveIdx = Math.min(_cmdPalActiveIdx + 1, items.length - 1);
+      updateCmdPalActive(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      _cmdPalActiveIdx = Math.max(_cmdPalActiveIdx - 1, 0);
+      updateCmdPalActive(items);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const active = list.querySelector('.mw-cmdpal-item.active');
+      if (active) active.click();
+    } else if (e.key === 'Escape') {
+      closeCommandPalette();
+    }
+  });
+}
+
+function closeCommandPalette() {
+  document.getElementById('mwCmdPal')?.remove();
+  _cmdPalOpen = false;
+}
+
+function updateCmdPalActive(items) {
+  items.forEach((it, i) => it.classList.toggle('active', i === _cmdPalActiveIdx));
+  const activeEl = items[_cmdPalActiveIdx];
+  if (activeEl) activeEl.scrollIntoView({ block: 'nearest' });
+}
+
+function renderCmdPalList(query, list) {
+  list.innerHTML = '';
+  const allFiles = [...WORK_FILES, ...customWorkFiles];
+  const q = query.toLowerCase();
+  const filtered = q ? allFiles.filter(f => f.title.toLowerCase().includes(q)) : allFiles;
+
+  if (!filtered.length) {
+    const empty = document.createElement('div');
+    empty.className = 'mw-cmdpal-empty';
+    empty.textContent = 'No documents found';
+    list.appendChild(empty); return;
+  }
+
+  filtered.forEach((f, i) => {
+    const item = document.createElement('div');
+    item.className = 'mw-cmdpal-item' + (i === _cmdPalActiveIdx ? ' active' : '');
+    const emojiEl = document.createElement('div');
+    emojiEl.className = 'mw-cmdpal-emoji';
+    const emoji = getFileEmoji(f.id);
+    emojiEl.textContent = emoji || '📄';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'mw-cmdpal-title';
+    titleEl.textContent = f.title;
+    const groupEl = document.createElement('div');
+    groupEl.className = 'mw-cmdpal-group';
+    groupEl.textContent = f.group || 'My Files';
+    item.appendChild(emojiEl); item.appendChild(titleEl); item.appendChild(groupEl);
+    item.onclick = () => {
+      closeCommandPalette();
+      switchTab('mywork');
+      activeWorkFile = f.id;
+      renderSidebar();
+      renderFileContent(f.id);
+    };
+    list.appendChild(item);
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    openCommandPalette();
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Wire up slash menu + selection toolbar after renderFileContent
+// ═══════════════════════════════════════════════════════════════════
+(function patchRenderFileContent() {
+  const _orig = window.renderFileContent;
+  window.renderFileContent = function(fileId) {
+    _orig(fileId);
+    // Init slash menu on the newly created editable
+    const editable = document.querySelector('.mw-editable');
+    if (editable) initSlashMenu(editable);
+    // Ensure selection toolbar exists
+    createSelToolbar();
+  };
+})();
+
+// Also run once for any already-rendered editable (e.g. on tab switch)
+createSelToolbar();
 </script>
 </body>
 </html>
