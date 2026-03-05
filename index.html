@@ -651,11 +651,116 @@
     .mw-cmdpal-title { font-size: 14px; color: #e0e0e0; flex: 1; }
     .mw-cmdpal-group { font-size: 11px; color: #444; }
     .mw-cmdpal-empty { font-size: 13px; color: #444; text-align: center; padding: 28px; }
+
+/* ── Hemingway Bridge ── */
+.bridge-btn {
+  font-size: 11px; color: #3a3a3a; background: none; border: none;
+  cursor: pointer; font-family: inherit; padding: 0 4px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: color 0.15s; white-space: nowrap; flex-shrink: 0;
+}
+.bridge-btn:hover { color: #888; }
+.bridge-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1000;display:flex;align-items:center;justify-content:center; }
+.bridge-modal { background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:28px 32px;width:480px;max-width:92vw; }
+.bridge-title { font-size:13px;font-weight:600;color:#e0e0e0;margin-bottom:4px; }
+.bridge-sub { font-size:11px;color:#555;margin-bottom:22px;letter-spacing:0.02em; }
+.bridge-field { margin-bottom:16px; }
+.bridge-label { font-size:10px;color:#555;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;display:block; }
+.bridge-input { width:100%;background:#0a0a0a;border:1px solid #222;border-radius:6px;padding:9px 13px;font-size:13px;color:#e0e0e0;font-family:inherit;outline:none;resize:none;line-height:1.5;transition:border-color 0.15s; }
+.bridge-input:focus { border-color:#444; }
+.bridge-row { display:flex;gap:10px;justify-content:flex-end;margin-top:6px; }
+.bridge-save { background:#e0e0e0;color:#000;border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit; }
+.bridge-save:hover { background:#fff; }
+.bridge-cancel { background:none;color:#555;border:none;border-radius:6px;padding:9px 16px;font-size:13px;cursor:pointer;font-family:inherit; }
+.bridge-cancel:hover { color:#aaa; }
+.bridge-banner { background:#0e1a12;border:1px solid #1a3a22;border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px;font-size:12px;color:#aaa;flex-wrap:wrap; }
+.bridge-banner-label { color:#34d399;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;flex-shrink:0; }
+.bridge-banner-text { flex:1;min-width:0;color:#888; }
+.bridge-banner-actions { display:flex;gap:8px;flex-shrink:0; }
+.bridge-banner-link { font-size:11px;color:#34d399;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;text-decoration:underline;text-underline-offset:2px;transition:opacity 0.15s; }
+.bridge-banner-link:hover { opacity:0.75; }
+.bridge-banner-dismiss { font-size:11px;color:#3a3a3a;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;transition:color 0.15s; }
+.bridge-banner-dismiss:hover { color:#888; }
+.bridge-view-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1001;display:flex;align-items:center;justify-content:center; }
+.bridge-view-modal { background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:28px 32px;width:480px;max-width:92vw; }
+.bridge-view-title { font-size:13px;font-weight:600;color:#e0e0e0;margin-bottom:4px; }
+.bridge-view-time { font-size:10px;color:#444;margin-bottom:20px; }
+.bridge-view-field { margin-bottom:14px; }
+.bridge-view-label { font-size:10px;color:#3a3a3a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;display:block; }
+.bridge-view-text { font-size:13px;color:#aaa;line-height:1.55; }
+.bridge-view-close { margin-top:20px;display:flex;justify-content:flex-end; }
+.bridge-view-close-btn { background:none;color:#555;border:none;border-radius:6px;padding:8px 16px;font-size:13px;cursor:pointer;font-family:inherit; }
+.bridge-view-close-btn:hover { color:#aaa; }
+
+/* ── Diverge / Converge Mode ── */
+.mode-toggle { display:flex;align-items:center;background:#111;border:1px solid #222;border-radius:99px;padding:3px;gap:2px;flex-shrink:0; }
+.mode-pill { font-size:11px;font-weight:600;letter-spacing:0.04em;padding:4px 12px;border-radius:99px;border:none;cursor:pointer;font-family:inherit;transition:all 0.2s;background:none;color:#444;white-space:nowrap; }
+.mode-pill.active-explore { background:#0e1f2a;color:#60a5fa; }
+.mode-pill.active-execute { background:#1a1a1a;color:#e0e0e0; }
+.mode-banner { font-size:11px;padding:7px 14px;border-radius:6px;margin-bottom:18px;letter-spacing:0.03em; }
+.mode-banner.explore { background:#0a1520;color:#60a5fa;border:1px solid #1a2f42; }
+.mode-banner.execute { background:#111;color:#555;border:1px solid #1e1e1e; }
+.related-panel { background:#0a0e10;border:1px solid #1a2530;border-radius:8px;padding:16px 18px;margin-bottom:24px; }
+.related-panel-title { font-size:10px;font-weight:700;color:#2a4a5a;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px; }
+.related-file-item { display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #111;cursor:pointer;transition:color 0.12s; }
+.related-file-item:last-child { border-bottom:none; }
+.related-file-item:hover .related-file-name { color:#e0e0e0; }
+.related-file-dot { width:5px;height:5px;border-radius:50%;background:#1e4060;flex-shrink:0; }
+.related-file-name { font-size:12px;color:#3a6070;transition:color 0.12s; }
+body.explore-mode .main { border-right-color:#1e2a2a; }
+body.explore-mode .section { border-top-color:#1a2525; }
+body.explore-mode .task { border-bottom-color:#111820; }
+
+/* ── Quick Capture Inbox ── */
+.capture-fab { position:fixed;bottom:90px;right:28px;width:44px;height:44px;border-radius:50%;background:#141414;border:1px solid #2a2a2a;color:#e0e0e0;font-size:20px;font-weight:300;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:150;box-shadow:0 4px 16px rgba(0,0,0,0.6);transition:background 0.15s,border-color 0.15s,transform 0.12s;font-family:inherit; }
+.capture-fab:hover { background:#1e1e1e;border-color:#3a3a3a;transform:scale(1.06); }
+.capture-badge { position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;border-radius:99px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;line-height:17px;text-align:center;padding:0 4px;pointer-events:none;display:none; }
+.capture-badge.visible { display:block; }
+.capture-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2100;display:flex;align-items:flex-start;justify-content:center;padding-top:22vh; }
+.capture-modal { background:#111;border:1px solid #2a2a2a;border-radius:12px;width:540px;max-width:92vw;box-shadow:0 24px 80px rgba(0,0,0,0.95);overflow:hidden; }
+.capture-input { width:100%;background:none;border:none;border-bottom:1px solid #1e1e1e;padding:18px 22px;font-size:15px;color:#e8e8e8;font-family:inherit;outline:none;line-height:1.55;resize:none;min-height:64px;max-height:180px;overflow-y:auto; }
+.capture-input::placeholder { color:#3a3a3a; }
+.capture-resonance { display:flex;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid #1a1a1a; }
+.capture-res-label { font-size:10px;color:#3a3a3a;text-transform:uppercase;letter-spacing:0.08em;flex-shrink:0;margin-right:2px; }
+.capture-res-btn { font-size:11px;font-weight:600;background:none;border:1px solid #222;border-radius:99px;padding:3px 10px;cursor:pointer;font-family:inherit;color:#555;transition:all 0.12s;display:flex;align-items:center;gap:4px;white-space:nowrap; }
+.capture-res-btn:hover { border-color:#3a3a3a;color:#aaa; }
+.capture-res-btn.selected { border-color:#3a3a3a;color:#e0e0e0;background:#1a1a1a; }
+.capture-footer { display:flex;align-items:center;justify-content:space-between;padding:10px 16px 12px; }
+.capture-hint { font-size:10px;color:#333;letter-spacing:0.04em; }
+.capture-hint kbd { font-family:inherit;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:3px;padding:1px 5px;font-size:10px;color:#555; }
+.capture-save-btn { background:#e0e0e0;color:#000;border:none;border-radius:6px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.12s; }
+.capture-save-btn:hover { background:#fff; }
+.capture-save-btn:disabled { background:#2a2a2a;color:#555;cursor:default; }
+.inbox-tab-wrap { display:flex;align-items:center;gap:6px; }
+.inbox-tab-badge { font-size:9px;font-weight:700;background:#ef4444;color:#fff;border-radius:99px;padding:1px 5px;min-width:16px;text-align:center;display:none; }
+.inbox-tab-badge.visible { display:inline-block; }
+#inbox-pane { display:none;max-width:640px; }
+.inbox-empty { font-size:13px;color:#444;padding:48px 0;text-align:center; }
+.inbox-card { background:#0f0f0f;border:1px solid #1e1e1e;border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;transition:border-color 0.15s; }
+.inbox-card:hover { border-color:#2a2a2a; }
+.inbox-card-text { font-size:14px;line-height:1.6;color:#d0d0d0;white-space:pre-wrap;word-break:break-word;margin-bottom:10px; }
+.inbox-card-meta { display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap; }
+.inbox-card-time { font-size:10px;color:#3a3a3a;letter-spacing:0.04em; }
+.inbox-res-badge { font-size:10px;font-weight:600;border-radius:99px;padding:2px 9px;letter-spacing:0.03em;display:inline-flex;align-items:center;gap:4px; }
+.inbox-res-badge.inspired   { background:#1a1200;color:#fbbf24;border:1px solid #3a2800; }
+.inbox-res-badge.useful     { background:#071a12;color:#34d399;border:1px solid #0a3a1a; }
+.inbox-res-badge.surprising { background:#160f2e;color:#a78bfa;border:1px solid #2a1a5a; }
+.inbox-card-actions { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
+.inbox-action-btn { font-size:11px;font-weight:500;background:none;border:1px solid #222;border-radius:6px;padding:4px 11px;cursor:pointer;font-family:inherit;color:#666;transition:all 0.12s;white-space:nowrap; }
+.inbox-action-btn:hover { border-color:#3a3a3a;color:#ccc; }
+.inbox-action-btn.primary { border-color:#2a2a2a;color:#a0a0a0; }
+.inbox-action-btn.danger:hover { border-color:#3a0a0a;color:#ef4444; }
+.inbox-move-dropdown { position:absolute;z-index:300;background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:6px;min-width:220px;box-shadow:0 12px 36px rgba(0,0,0,0.85); }
+.inbox-move-item { display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:5px;cursor:pointer;font-size:13px;color:#c0c0c0;transition:background 0.1s; }
+.inbox-move-item:hover { background:#1a1a1a; }
+.inbox-move-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/marked@13/marked.min.js"></script>
 </head>
 <body>
 <div class="container">
+
+  <div id="bridgeBanner"></div>
 
   <!-- Header -->
   <div class="header-top">
@@ -668,12 +773,20 @@
   <div class="progress-row">
     <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
     <div class="prog-txt" id="pTxt">0 / 0</div>
+    <div class="mode-toggle" id="modeToggle">
+      <button class="mode-pill" id="modeExplore" onclick="setMode('explore')">Explore</button>
+      <button class="mode-pill" id="modeExecute" onclick="setMode('execute')">Execute</button>
+    </div>
+    <button class="bridge-btn" onclick="openBridgeModal()">End Session</button>
     <button class="granola-btn" id="granolaBtn" onclick="toggleGranola()">Connect Granola</button>
   </div>
 
   <div class="tab-bar">
     <button class="tab-btn active" data-tab="today" onclick="switchTab('today')">Today</button>
     <button class="tab-btn" data-tab="mywork" onclick="switchTab('mywork')">My Work</button>
+    <button class="tab-btn" data-tab="inbox" onclick="switchTab('inbox')">
+      <span class="inbox-tab-wrap">Inbox <span class="inbox-tab-badge" id="inboxTabBadge"></span></span>
+    </button>
   </div>
 
   <!-- Today tab -->
@@ -690,7 +803,25 @@
     </div>
   </div>
 
+  <!-- Inbox tab -->
+  <div id="inbox-pane">
+    <div class="section" style="border-top:none;padding-top:0;">
+      <div class="sec-header" style="margin-bottom:20px;">
+        <div class="sec-dot" style="background:#ef4444;"></div>
+        <div class="sec-title">Capture Inbox</div>
+        <div class="sec-count" id="inboxCount"></div>
+        <button class="clear-btn" id="inboxArchiveAllBtn" onclick="archiveAllInbox()" style="display:none;">archive all</button>
+      </div>
+      <div id="inboxList"></div>
+    </div>
+  </div>
+
 </div><!-- /container -->
+<!-- Quick Capture FAB -->
+<button class="capture-fab" id="captureFab" onclick="openCaptureModal()" title="Quick Capture (Cmd+J)">
+  +
+  <span class="capture-badge" id="captureBadge"></span>
+</button>
 <script>
 // ── Date ──────────────────────────────────────────────────────────────────────
 const D=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -1390,18 +1521,28 @@ let currentTab = 'today';
 function switchTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-  const chatBar   = document.querySelector('.chat-bar');
+  const chatBar    = document.querySelector('.chat-bar');
   const todayPane  = document.getElementById('today-pane');
   const myworkPane = document.getElementById('mywork-pane');
+  const inboxPane  = document.getElementById('inbox-pane');
+  const captureFab = document.getElementById('captureFab');
+  if (todayPane)  todayPane.style.display  = 'none';
+  if (myworkPane) myworkPane.style.display = 'none';
+  if (inboxPane)  inboxPane.style.display  = 'none';
   if (tab === 'today') {
     if (todayPane)  todayPane.style.display  = '';
-    if (myworkPane) myworkPane.style.display = 'none';
     if (chatBar)    chatBar.style.display    = '';
-  } else {
-    if (todayPane)  todayPane.style.display  = 'none';
+    if (captureFab) captureFab.style.display = '';
+  } else if (tab === 'mywork') {
     if (myworkPane) myworkPane.style.display = '';
     if (chatBar)    chatBar.style.display    = 'none';
+    if (captureFab) captureFab.style.display = '';
     renderMyWork();
+  } else if (tab === 'inbox') {
+    if (inboxPane)  inboxPane.style.display  = '';
+    if (chatBar)    chatBar.style.display    = 'none';
+    if (captureFab) captureFab.style.display = '';
+    renderInboxPane();
   }
 }
 
@@ -2744,6 +2885,331 @@ document.addEventListener('keydown', e => {
 
 // Also run once for any already-rendered editable (e.g. on tab switch)
 createSelToolbar();
+
+// ═══════════════════════════════════════════════════════════════════
+// Quick Capture Inbox
+// ═══════════════════════════════════════════════════════════════════
+const INBOX_KEY = 'habuild_inbox';
+function loadInbox() { return JSON.parse(localStorage.getItem(INBOX_KEY) || '[]'); }
+function saveInbox(items) { localStorage.setItem(INBOX_KEY, JSON.stringify(items)); }
+function inboxUnprocessedCount() { return loadInbox().filter(i => !i.processed).length; }
+
+function syncInboxBadges() {
+  const n = inboxUnprocessedCount();
+  const fab = document.getElementById('captureBadge');
+  const tabBadge = document.getElementById('inboxTabBadge');
+  if (fab) { fab.textContent = n > 0 ? (n > 9 ? '9+' : n) : ''; fab.classList.toggle('visible', n > 0); }
+  if (tabBadge) { tabBadge.textContent = n > 0 ? (n > 9 ? '9+' : n) : ''; tabBadge.classList.toggle('visible', n > 0); }
+}
+
+function openCaptureModal() {
+  if (document.getElementById('captureOverlay')) return;
+  let selectedResonance = null;
+  const overlay = document.createElement('div');
+  overlay.className = 'capture-overlay'; overlay.id = 'captureOverlay';
+  overlay.onclick = e => { if (e.target === overlay) closeCaptureModal(); };
+  const modal = document.createElement('div');
+  modal.className = 'capture-modal'; modal.onclick = e => e.stopPropagation();
+  const textarea = document.createElement('textarea');
+  textarea.className = 'capture-input'; textarea.placeholder = 'Capture any idea, thought, or note…'; textarea.rows = 2;
+  textarea.addEventListener('input', () => { textarea.style.height = 'auto'; textarea.style.height = Math.min(textarea.scrollHeight, 180) + 'px'; });
+  textarea.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { e.preventDefault(); closeCaptureModal(); return; }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSaveCapture(textarea.value, selectedResonance); }
+  });
+  const resRow = document.createElement('div'); resRow.className = 'capture-resonance';
+  const resLabel = document.createElement('span'); resLabel.className = 'capture-res-label'; resLabel.textContent = 'Resonance:';
+  resRow.appendChild(resLabel);
+  const RESONANCE_OPTIONS = [{ id:'inspired', emoji:'💡', label:'Inspired' }, { id:'useful', emoji:'🔧', label:'Useful' }, { id:'surprising', emoji:'⚡', label:'Surprising' }];
+  const resBtns = [];
+  RESONANCE_OPTIONS.forEach(opt => {
+    const btn = document.createElement('button'); btn.className = 'capture-res-btn'; btn.dataset.resonance = opt.id;
+    btn.innerHTML = `${opt.emoji} ${opt.label}`;
+    btn.onclick = () => {
+      if (selectedResonance === opt.id) { selectedResonance = null; btn.classList.remove('selected'); }
+      else { selectedResonance = opt.id; resBtns.forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); }
+    };
+    resBtns.push(btn); resRow.appendChild(btn);
+  });
+  const footer = document.createElement('div'); footer.className = 'capture-footer';
+  const hint = document.createElement('div'); hint.className = 'capture-hint';
+  hint.innerHTML = '<kbd>Enter</kbd> save &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> newline &nbsp;·&nbsp; <kbd>Esc</kbd> close';
+  const saveBtn = document.createElement('button'); saveBtn.className = 'capture-save-btn'; saveBtn.textContent = 'Capture'; saveBtn.disabled = true;
+  textarea.addEventListener('input', () => { saveBtn.disabled = textarea.value.trim().length === 0; });
+  saveBtn.onclick = () => doSaveCapture(textarea.value, selectedResonance);
+  footer.appendChild(hint); footer.appendChild(saveBtn);
+  modal.appendChild(textarea); modal.appendChild(resRow); modal.appendChild(footer);
+  overlay.appendChild(modal); document.body.appendChild(overlay);
+  setTimeout(() => textarea.focus(), 30);
+}
+
+function closeCaptureModal() { document.getElementById('captureOverlay')?.remove(); }
+
+function doSaveCapture(text, resonance) {
+  const trimmed = text.trim(); if (!trimmed) return;
+  const items = loadInbox();
+  items.unshift({ id:'cap_'+Date.now()+'_'+Math.random().toString(36).slice(2), text:trimmed, resonance:resonance||null, capturedAt:Date.now(), processed:false });
+  saveInbox(items); closeCaptureModal(); syncInboxBadges(); showToast('Captured');
+  if (currentTab === 'inbox') renderInboxPane();
+}
+
+function renderInboxPane() {
+  const list = document.getElementById('inboxList');
+  const countEl = document.getElementById('inboxCount');
+  const archiveAllBtn = document.getElementById('inboxArchiveAllBtn');
+  if (!list) return;
+  list.innerHTML = '';
+  const items = loadInbox().filter(i => !i.processed);
+  if (countEl) countEl.textContent = items.length + ' unprocessed';
+  if (archiveAllBtn) archiveAllBtn.style.display = items.length > 0 ? '' : 'none';
+  if (items.length === 0) {
+    const empty = document.createElement('div'); empty.className = 'inbox-empty';
+    empty.textContent = 'Inbox zero. Capture something new with + or Cmd+J.';
+    list.appendChild(empty); return;
+  }
+  items.forEach(item => list.appendChild(mkInboxCard(item)));
+}
+
+const DOT_BG = { 'd-data':'#3B82F6','d-coord':'#8B5CF6','d-calls':'#10B981','d-focus':'#F59E0B' };
+
+function mkInboxCard(item) {
+  const card = document.createElement('div'); card.className = 'inbox-card'; card.id = 'icard_'+item.id;
+  const textEl = document.createElement('div'); textEl.className = 'inbox-card-text'; textEl.textContent = item.text;
+  card.appendChild(textEl);
+  const meta = document.createElement('div'); meta.className = 'inbox-card-meta';
+  const timeEl = document.createElement('span'); timeEl.className = 'inbox-card-time'; timeEl.textContent = formatRelativeTime(item.capturedAt);
+  meta.appendChild(timeEl);
+  if (item.resonance) {
+    const RM = { inspired:{emoji:'💡',label:'Inspired'}, useful:{emoji:'🔧',label:'Useful'}, surprising:{emoji:'⚡',label:'Surprising'} };
+    const r = RM[item.resonance];
+    if (r) { const badge = document.createElement('span'); badge.className = 'inbox-res-badge '+item.resonance; badge.textContent = r.emoji+' '+r.label; meta.appendChild(badge); }
+  }
+  card.appendChild(meta);
+  const actions = document.createElement('div'); actions.className = 'inbox-card-actions';
+  const moveBtn = document.createElement('button'); moveBtn.className = 'inbox-action-btn primary'; moveBtn.textContent = 'Move to project →';
+  moveBtn.onclick = e => { e.stopPropagation(); showMoveDropdown(item, moveBtn, card); };
+  const todayBtn = document.createElement('button'); todayBtn.className = 'inbox-action-btn'; todayBtn.textContent = 'Add to today →';
+  todayBtn.onclick = () => inboxAddToToday(item, card);
+  const archiveBtn = document.createElement('button'); archiveBtn.className = 'inbox-action-btn danger'; archiveBtn.textContent = 'Archive';
+  archiveBtn.onclick = () => inboxArchive(item.id, card);
+  actions.appendChild(moveBtn); actions.appendChild(todayBtn); actions.appendChild(archiveBtn);
+  card.appendChild(actions); return card;
+}
+
+let _moveDropdownEl = null;
+function showMoveDropdown(item, anchorBtn, card) {
+  if (_moveDropdownEl) { _moveDropdownEl.remove(); _moveDropdownEl = null; return; }
+  const drop = document.createElement('div'); drop.className = 'inbox-move-dropdown'; _moveDropdownEl = drop;
+  data.forEach(sec => {
+    const row = document.createElement('div'); row.className = 'inbox-move-item';
+    const dot = document.createElement('span'); dot.className = 'inbox-move-dot'; dot.style.background = DOT_BG[sec.dot] || '#888';
+    const label = document.createElement('span'); label.textContent = sec.label;
+    row.appendChild(dot); row.appendChild(label);
+    row.onclick = () => {
+      const newTask = { id:sec.id+'_cap_'+Date.now(), label:item.text, tag:'', tc:'t-none', done:false };
+      sec.tasks.push(newTask); save(); render(); markInboxProcessed(item.id); card.remove();
+      syncInboxBadges(); updateInboxCountDisplay(); drop.remove(); _moveDropdownEl = null; showToast('Added to '+sec.label);
+    };
+    drop.appendChild(row);
+  });
+  document.body.appendChild(drop);
+  const rect = anchorBtn.getBoundingClientRect(); const dw = 220;
+  let left = rect.left; let top = rect.bottom + window.scrollY + 4;
+  if (left + dw > window.innerWidth - 12) left = window.innerWidth - dw - 12;
+  drop.style.left = Math.max(8, left)+'px'; drop.style.top = top+'px';
+  setTimeout(() => {
+    document.addEventListener('click', function closeDrop(ev) {
+      if (!drop.contains(ev.target) && ev.target !== anchorBtn) { drop.remove(); _moveDropdownEl = null; document.removeEventListener('click', closeDrop); }
+    });
+  }, 0);
+}
+
+function inboxAddToToday(item, card) {
+  const parsed = parseInput(item.text);
+  const sec = data.find(s => s.id === parsed.secId) || data.find(s => s.id === 'focus');
+  if (!sec) return;
+  sec.tasks.push({ id:sec.id+'_cap_'+Date.now(), label:item.text, tag:parsed.tag||'', tc:parsed.tc||'t-none', done:false });
+  save(); render(); markInboxProcessed(item.id); card.remove(); syncInboxBadges(); updateInboxCountDisplay(); showToast('Added to '+sec.label);
+}
+
+function inboxArchive(itemId, card) { markInboxProcessed(itemId); card.remove(); syncInboxBadges(); updateInboxCountDisplay(); showToast('Archived'); }
+function archiveAllInbox() { const items = loadInbox(); items.forEach(i => { i.processed = true; }); saveInbox(items); syncInboxBadges(); renderInboxPane(); }
+function markInboxProcessed(itemId) { const items = loadInbox(); const idx = items.findIndex(i => i.id === itemId); if (idx !== -1) { items[idx].processed = true; saveInbox(items); } }
+function updateInboxCountDisplay() {
+  const countEl = document.getElementById('inboxCount'); const archiveAllBtn = document.getElementById('inboxArchiveAllBtn');
+  const remaining = loadInbox().filter(i => !i.processed).length;
+  if (countEl) countEl.textContent = remaining + ' unprocessed';
+  if (archiveAllBtn) archiveAllBtn.style.display = remaining > 0 ? '' : 'none';
+  const list = document.getElementById('inboxList');
+  if (list && remaining === 0 && !list.querySelector('.inbox-empty')) {
+    list.innerHTML = ''; const empty = document.createElement('div'); empty.className = 'inbox-empty';
+    empty.textContent = 'Inbox zero. Capture something new with + or Cmd+J.'; list.appendChild(empty);
+  }
+}
+function formatRelativeTime(ts) {
+  const diff = Date.now()-ts, mins=Math.floor(diff/60000), hours=Math.floor(diff/3600000), days=Math.floor(diff/86400000);
+  if (mins<1) return 'Just now'; if (mins<60) return mins+'m ago'; if (hours<24) return hours+'h ago';
+  if (days===1) return 'Yesterday'; return days+'d ago';
+}
+document.addEventListener('keydown', e => {
+  if ((e.metaKey||e.ctrlKey) && e.key==='j') { e.preventDefault(); document.getElementById('captureOverlay') ? closeCaptureModal() : openCaptureModal(); }
+});
+syncInboxBadges();
+
+// ═══════════════════════════════════════════════════════════════════
+// Hemingway Bridge
+// ═══════════════════════════════════════════════════════════════════
+const BRIDGE_KEY = 'habuild_bridge';
+const BRIDGE_PROMPTS = [
+  { key:'nextSteps',  label:'Next steps →',              placeholder:'What needs to happen next?' },
+  { key:'blocker',    label:'Biggest blocker?',           placeholder:'What is slowing you down?' },
+  { key:'forget',     label:'What will I forget?',        placeholder:'Key context to carry forward...' },
+  { key:'intention',  label:'Intention for next session:',placeholder:'What do you want to focus on?' },
+];
+
+function openBridgeModal() {
+  if (document.getElementById('bridgeOverlay')) return;
+  const ov = document.createElement('div'); ov.className = 'bridge-overlay'; ov.id = 'bridgeOverlay';
+  ov.onclick = () => ov.remove();
+  const modal = document.createElement('div'); modal.className = 'bridge-modal'; modal.onclick = e => e.stopPropagation();
+  const title = document.createElement('div'); title.className = 'bridge-title'; title.textContent = 'Hemingway Bridge';
+  const sub = document.createElement('div'); sub.className = 'bridge-sub'; sub.textContent = 'Leave a note for your future self before closing.';
+  modal.appendChild(title); modal.appendChild(sub);
+  const inputs = {};
+  BRIDGE_PROMPTS.forEach(p => {
+    const field = document.createElement('div'); field.className = 'bridge-field';
+    const label = document.createElement('label'); label.className = 'bridge-label'; label.textContent = p.label;
+    const textarea = document.createElement('textarea'); textarea.className = 'bridge-input'; textarea.rows = 2; textarea.placeholder = p.placeholder;
+    textarea.onkeydown = e => e.stopPropagation(); inputs[p.key] = textarea;
+    field.appendChild(label); field.appendChild(textarea); modal.appendChild(field);
+  });
+  const row = document.createElement('div'); row.className = 'bridge-row';
+  const cancelBtn = document.createElement('button'); cancelBtn.className = 'bridge-cancel'; cancelBtn.textContent = 'Discard'; cancelBtn.onclick = () => ov.remove();
+  const saveBtn = document.createElement('button'); saveBtn.className = 'bridge-save'; saveBtn.textContent = 'Save bridge note';
+  saveBtn.onclick = () => {
+    const text = {}; BRIDGE_PROMPTS.forEach(p => { text[p.key] = inputs[p.key].value.trim(); });
+    if (!Object.values(text).some(v => v.length > 0)) { ov.remove(); return; }
+    localStorage.setItem(BRIDGE_KEY, JSON.stringify({ text, savedAt:Date.now() })); ov.remove(); showToast('Bridge note saved');
+  };
+  row.appendChild(cancelBtn); row.appendChild(saveBtn); modal.appendChild(row); ov.appendChild(modal); document.body.appendChild(ov);
+  setTimeout(() => inputs.nextSteps.focus(), 50);
+}
+
+function renderBridgeBanner() {
+  const container = document.getElementById('bridgeBanner'); if (!container) return; container.innerHTML = '';
+  const raw = localStorage.getItem(BRIDGE_KEY); if (!raw) return;
+  let note; try { note = JSON.parse(raw); } catch(e) { return; }
+  const savedDay = new Date(note.savedAt).toISOString().split('T')[0];
+  if (savedDay === todayStr) return;
+  const nextStepsText = note.text?.nextSteps || '';
+  const preview = nextStepsText ? nextStepsText.slice(0, 80)+(nextStepsText.length>80?'…':'') : 'Session note from '+new Date(note.savedAt).toLocaleDateString();
+  const banner = document.createElement('div'); banner.className = 'bridge-banner';
+  const label = document.createElement('span'); label.className = 'bridge-banner-label'; label.textContent = 'Last session';
+  const text = document.createElement('span'); text.className = 'bridge-banner-text'; text.textContent = preview;
+  const actions = document.createElement('div'); actions.className = 'bridge-banner-actions';
+  const viewBtn = document.createElement('button'); viewBtn.className = 'bridge-banner-link'; viewBtn.textContent = 'View full'; viewBtn.onclick = () => openBridgeView(note);
+  const dismissBtn = document.createElement('button'); dismissBtn.className = 'bridge-banner-dismiss'; dismissBtn.textContent = 'Dismiss';
+  dismissBtn.onclick = () => { localStorage.removeItem(BRIDGE_KEY); banner.remove(); };
+  actions.appendChild(viewBtn); actions.appendChild(dismissBtn);
+  banner.appendChild(label); banner.appendChild(text); banner.appendChild(actions); container.appendChild(banner);
+}
+
+function openBridgeView(note) {
+  if (document.getElementById('bridgeViewOverlay')) return;
+  const ov = document.createElement('div'); ov.className = 'bridge-view-overlay'; ov.id = 'bridgeViewOverlay'; ov.onclick = () => ov.remove();
+  const modal = document.createElement('div'); modal.className = 'bridge-view-modal'; modal.onclick = e => e.stopPropagation();
+  const title = document.createElement('div'); title.className = 'bridge-view-title'; title.textContent = 'Last Session Note';
+  const time = document.createElement('div'); time.className = 'bridge-view-time';
+  time.textContent = 'Saved '+new Date(note.savedAt).toLocaleString([],{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  modal.appendChild(title); modal.appendChild(time);
+  BRIDGE_PROMPTS.forEach(p => {
+    const val = note.text?.[p.key]; if (!val) return;
+    const field = document.createElement('div'); field.className = 'bridge-view-field';
+    const label = document.createElement('span'); label.className = 'bridge-view-label'; label.textContent = p.label;
+    const text = document.createElement('div'); text.className = 'bridge-view-text'; text.textContent = val;
+    field.appendChild(label); field.appendChild(text); modal.appendChild(field);
+  });
+  const closeRow = document.createElement('div'); closeRow.className = 'bridge-view-close';
+  const closeBtn = document.createElement('button'); closeBtn.className = 'bridge-view-close-btn'; closeBtn.textContent = 'Close'; closeBtn.onclick = () => ov.remove();
+  closeRow.appendChild(closeBtn); modal.appendChild(closeRow); ov.appendChild(modal); document.body.appendChild(ov);
+}
+renderBridgeBanner();
+
+// ═══════════════════════════════════════════════════════════════════
+// Diverge / Converge Mode
+// ═══════════════════════════════════════════════════════════════════
+const SESSION_MODE_KEY = 'habuild_session_mode';
+function getInitialMode() {
+  const raw = localStorage.getItem(SESSION_MODE_KEY); if (!raw) return 'execute';
+  try { const {mode,date} = JSON.parse(raw); if (date!==todayStr) return 'execute'; return mode==='explore'?'explore':'execute'; } catch(e) { return 'execute'; }
+}
+let currentMode = getInitialMode();
+
+function setMode(mode) { currentMode = mode; localStorage.setItem(SESSION_MODE_KEY, JSON.stringify({mode,date:todayStr})); applyMode(); }
+
+function applyMode() {
+  const exploreBtn = document.getElementById('modeExplore'); const executeBtn = document.getElementById('modeExecute');
+  if (exploreBtn && executeBtn) {
+    exploreBtn.className = 'mode-pill'+(currentMode==='explore'?' active-explore':'');
+    executeBtn.className = 'mode-pill'+(currentMode==='execute'?' active-execute':'');
+  }
+  document.body.classList.toggle('explore-mode', currentMode==='explore');
+  const existing = document.getElementById('modeBanner'); if (existing) existing.remove();
+  const banner = document.createElement('div'); banner.id = 'modeBanner'; banner.className = 'mode-banner '+currentMode;
+  banner.textContent = currentMode==='explore' ? 'Explore mode — capture freely, don\'t act yet' : 'Execute mode — finish what you started';
+  const todayPane = document.getElementById('today-pane');
+  if (todayPane && todayPane.style.display !== 'none') todayPane.insertAdjacentElement('beforebegin', banner);
+  renderRelatedPanel(); applyInboxMode();
+}
+
+function renderRelatedPanel() {
+  const existing = document.getElementById('relatedPanel'); if (existing) existing.remove();
+  if (currentMode !== 'explore') return;
+  const allFiles = [...(typeof WORK_FILES!=='undefined'?WORK_FILES:[]), ...(typeof customWorkFiles!=='undefined'?customWorkFiles:[])];
+  const panel = document.createElement('div'); panel.className = 'related-panel'; panel.id = 'relatedPanel';
+  const ptitle = document.createElement('div'); ptitle.className = 'related-panel-title'; ptitle.textContent = 'Related Notes — My Work';
+  panel.appendChild(ptitle);
+  allFiles.forEach(f => {
+    const item = document.createElement('div'); item.className = 'related-file-item';
+    const dot = document.createElement('div'); dot.className = 'related-file-dot';
+    const name = document.createElement('span'); name.className = 'related-file-name'; name.textContent = f.title;
+    item.appendChild(dot); item.appendChild(name);
+    item.onclick = () => { switchTab('mywork'); activeWorkFile = f.id; renderSidebar(); renderFileContent(f.id); };
+    panel.appendChild(item);
+  });
+  const mainCol = document.getElementById('mainCol');
+  if (mainCol && mainCol.parentNode) mainCol.parentNode.insertBefore(panel, mainCol);
+}
+
+function applyInboxMode() {
+  const chatBar = document.querySelector('.chat-bar'); if (!chatBar) return;
+  if (currentMode === 'execute') {
+    chatBar.classList.add('execute-mode');
+    const inp = chatBar.querySelector('.chat-input'); const snd = chatBar.querySelector('.chat-send');
+    if (inp) inp.style.display = 'none'; if (snd) snd.style.display = 'none';
+    if (!chatBar._executeClickBound) {
+      chatBar._executeClickBound = true;
+      chatBar.querySelector('.chat-row')?.addEventListener('click', function(e) {
+        if (currentMode!=='execute') return;
+        if (e.target.classList.contains('chat-row')||e.target===this) {
+          chatBar.classList.remove('execute-mode');
+          const input = chatBar.querySelector('.chat-input'); if (input) { input.style.display=''; setTimeout(()=>input.focus(),0); }
+          const sendBtn = chatBar.querySelector('.chat-send'); if (sendBtn) sendBtn.style.display='';
+        }
+      });
+    }
+  } else {
+    chatBar.classList.remove('execute-mode');
+    const inp = chatBar.querySelector('.chat-input'); const snd = chatBar.querySelector('.chat-send');
+    if (inp) inp.style.display = ''; if (snd) snd.style.display = '';
+    setTimeout(() => { const inp2 = chatBar.querySelector('.chat-input'); if (inp2) inp2.focus(); }, 80);
+  }
+}
+applyMode();
+(function patchSwitchTab() {
+  const _origSwitch = window.switchTab;
+  window.switchTab = function(tab) { _origSwitch(tab); setTimeout(() => applyMode(), 0); };
+})();
 </script>
 </body>
 </html>
