@@ -754,6 +754,234 @@ body.explore-mode .task { border-bottom-color:#111820; }
 .inbox-move-item { display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:5px;cursor:pointer;font-size:13px;color:#c0c0c0;transition:background 0.1s; }
 .inbox-move-item:hover { background:#1a1a1a; }
 .inbox-move-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
+
+/* ── Progressive Summarization ── */
+.ps-layer-bar { display:flex;align-items:center;gap:6px;margin-bottom:16px;padding:8px 0 12px;border-bottom:1px solid #1a1a1a; }
+.ps-layer-label { font-size:10px;font-weight:600;color:#3a3a3a;text-transform:uppercase;letter-spacing:0.1em;margin-right:4px;flex-shrink:0; }
+.ps-layer-btn { font-size:11px;font-weight:600;letter-spacing:0.04em;background:none;border:1px solid #222;color:#444;border-radius:5px;padding:4px 11px;cursor:pointer;font-family:inherit;transition:all 0.15s; }
+.ps-layer-btn:hover { border-color:#3a3a3a;color:#888; }
+.ps-layer-btn.active { background:#1a1a1a;border-color:#3a3a3a;color:#e0e0e0; }
+.ps-mark-btn { margin-left:auto;font-size:11px;font-weight:600;letter-spacing:0.04em;background:none;border:1px solid #222;color:#444;border-radius:5px;padding:4px 11px;cursor:pointer;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;gap:5px; }
+.ps-mark-btn:hover { border-color:#3a3a3a;color:#888; }
+.ps-hl-btn { font-size:11px;font-weight:600;letter-spacing:0.04em;background:none;border:1px solid #222;color:#444;border-radius:5px;padding:4px 11px;cursor:pointer;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;gap:5px; }
+.ps-hl-btn:hover { border-color:#3a3a3a;color:#888; }
+mark.l2 { background:none;color:#f0f0f0;text-decoration:underline;text-decoration-color:#555;text-decoration-thickness:1px;text-underline-offset:3px;font-weight:500; }
+mark.l3 { background:rgba(251,191,36,0.15);color:inherit;border-radius:2px;padding:0 1px; }
+.ps-summary-block { margin-bottom:24px;border:1px solid #1e1e1e;border-radius:8px;overflow:hidden; }
+.ps-summary-header { display:flex;align-items:center;gap:8px;padding:8px 14px;background:#0e0e0e;cursor:pointer;user-select:none;transition:background 0.12s; }
+.ps-summary-header:hover { background:#111; }
+.ps-summary-label { font-size:10px;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:0.1em;flex:1; }
+.ps-summary-caret { font-size:10px;color:#3a3a3a;transition:transform 0.15s;flex-shrink:0; }
+.ps-summary-caret.open { transform:rotate(180deg); }
+.ps-summary-body { padding:12px 14px 14px;background:#0c0c0c; }
+.ps-summary-ta { width:100%;min-height:80px;background:none;border:none;outline:none;font-size:13px;line-height:1.7;color:#999;font-family:inherit;resize:none;box-sizing:border-box; }
+.ps-summary-ta:focus { color:#c8c8c8; }
+.ps-summary-ta::placeholder { color:#333;font-style:italic; }
+.ps-view-bold .mw-editable *:not(mark.l2):not(strong):not(mark.l2 *):not(strong *) { color:#333 !important; }
+.ps-view-bold .mw-editable mark.l2, .ps-view-bold .mw-editable strong { color:#f0f0f0 !important; }
+.ps-view-key .mw-editable * { color:#2a2a2a !important; }
+.ps-view-key .mw-editable mark.l3 { color:#e8e8e8 !important;background:rgba(251,191,36,0.22) !important; }
+.ps-view-key .mw-editable mark.l3 * { color:#e8e8e8 !important; }
+.ps-view-summary .mw-editable { display:none !important; }
+.ps-campsite-banner { display:flex;align-items:center;gap:10px;padding:8px 14px;background:#0d1220;border:1px solid #1a2540;border-radius:6px;margin-bottom:16px;font-size:12px;color:#60a5fa;line-height:1.4; }
+.ps-campsite-banner span { flex:1; }
+.ps-campsite-close { background:none;border:none;color:#444;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;flex-shrink:0;transition:color 0.15s; }
+.ps-campsite-close:hover { color:#888; }
+.ps-unrefined-badge { font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:#555;background:none;border:1px solid #2a2a2a;border-radius:99px;padding:1px 6px;margin-left:auto;flex-shrink:0;white-space:nowrap; }
+.mw-sel-btn.ps-l2-btn { text-decoration:underline;text-decoration-color:#666;text-underline-offset:3px; }
+.mw-sel-btn.ps-l3-btn { background:rgba(251,191,36,0.15);color:#fbbf24; }
+.mw-sel-btn.ps-l3-btn:hover { background:rgba(251,191,36,0.25);color:#fbbf24; }
+
+/* ── PARA Sidebar ── */
+.para-section { border-bottom: 1px solid #111; }
+.para-section:last-child { border-bottom: none; }
+
+.para-section-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+}
+.para-section-header:hover { background: #0f0f0f; }
+
+.para-section-chevron {
+  font-size: 9px; color: #3a3a3a;
+  flex-shrink: 0; transition: transform 0.18s;
+  width: 10px; text-align: center;
+}
+.para-section.open .para-section-chevron { transform: rotate(90deg); }
+
+.para-section-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: #3a3a3a; flex: 1;
+}
+.para-section-count {
+  font-size: 10px; color: #2a2a2a;
+}
+
+.para-section-body { display: none; }
+.para-section.open .para-section-body { display: block; }
+
+.para-file-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 20px 6px 30px;
+  font-size: 13px; color: #555;
+  cursor: pointer; transition: background 0.1s, color 0.1s;
+  position: relative; white-space: nowrap;
+  overflow: hidden;
+}
+.para-file-item:hover { background: #111; color: #ccc; }
+.para-file-item.active { background: #141414; color: #e8e8e8; font-weight: 500; }
+
+.para-file-icon { font-size: 13px; flex-shrink: 0; line-height: 1; }
+.para-file-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  flex-shrink: 0; background: #444;
+}
+.para-file-name {
+  flex: 1; overflow: hidden; text-overflow: ellipsis;
+}
+
+.para-deadline-badge {
+  font-size: 9px; font-weight: 600;
+  padding: 1px 6px; border-radius: 99px;
+  flex-shrink: 0; letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.para-deadline-overdue { background: #2a0a0a; color: #ef4444; }
+.para-deadline-soon    { background: #2a1800; color: #fbbf24; }
+.para-deadline-ok      { background: #0a2a12; color: #34d399; }
+
+.para-file-del {
+  opacity: 0; background: none; border: none;
+  color: #555; font-size: 14px; cursor: pointer;
+  padding: 0 2px; line-height: 1; flex-shrink: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+.para-file-item:hover .para-file-del { opacity: 1; }
+.para-file-del:hover { color: #e05050; }
+
+.para-new-file-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 20px 5px 30px;
+  background: none; border: none; color: #333;
+  font-size: 12px; cursor: pointer;
+  font-family: inherit; text-align: left;
+  width: 100%; transition: color 0.12s;
+}
+.para-new-file-btn:hover { color: #888; }
+
+.para-global-new {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 20px; background: none; border: none;
+  color: #444; font-size: 12px; cursor: pointer;
+  font-family: inherit; text-align: left;
+  width: 100%; border-top: 1px solid #111;
+  transition: color 0.12s; margin-top: 4px;
+}
+.para-global-new:hover { color: #aaa; }
+
+.para-new-file-row {
+  padding: 5px 16px 5px 20px;
+  display: flex; gap: 5px; align-items: center;
+}
+.para-new-file-input {
+  flex: 1; background: #0a0a0a; border: 1px solid #333;
+  border-radius: 4px; padding: 5px 8px;
+  font-size: 12px; color: #e0e0e0;
+  font-family: inherit; outline: none;
+}
+.para-new-file-ok {
+  background: #e0e0e0; color: #000;
+  border: none; border-radius: 4px;
+  padding: 5px 10px; font-size: 11px;
+  font-weight: 600; cursor: pointer;
+  font-family: inherit; white-space: nowrap;
+}
+.para-new-file-ok:hover { background: #fff; }
+.para-new-file-cancel {
+  background: none; border: none; color: #555;
+  font-size: 15px; cursor: pointer; padding: 0;
+}
+
+.para-ctx-menu {
+  position: fixed; z-index: 2000;
+  background: #141414; border: 1px solid #2a2a2a;
+  border-radius: 8px; padding: 6px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.9);
+  min-width: 180px;
+}
+.para-ctx-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 12px; border-radius: 5px;
+  cursor: pointer; font-size: 13px; color: #d0d0d0;
+  transition: background 0.1s;
+}
+.para-ctx-item:hover { background: #252525; }
+.para-ctx-item.danger { color: #e05050; }
+.para-ctx-sep {
+  height: 1px; background: #1e1e1e; margin: 4px 0;
+}
+.para-ctx-label {
+  font-size: 10px; color: #444;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 4px 12px 2px;
+}
+
+.para-dot-projects  { background: #60a5fa; }
+.para-dot-areas     { background: #34d399; }
+.para-dot-resources { background: #fbbf24; }
+.para-dot-archives  { background: #666; }
+
+.para-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+}
+.para-modal {
+  background: #111; border: 1px solid #2a2a2a;
+  border-radius: 12px; padding: 24px 28px;
+  width: 380px; max-width: 90vw;
+}
+.para-modal-title {
+  font-size: 14px; font-weight: 600;
+  color: #e0e0e0; margin-bottom: 18px;
+}
+.para-modal-label {
+  font-size: 11px; color: #888;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 6px;
+}
+.para-modal-select, .para-modal-input {
+  width: 100%; background: #0a0a0a;
+  border: 1px solid #2a2a2a; border-radius: 6px;
+  padding: 10px 12px; font-size: 13px;
+  color: #e0e0e0; font-family: inherit;
+  outline: none; margin-bottom: 14px;
+}
+.para-modal-select:focus, .para-modal-input:focus { border-color: #444; }
+.para-modal-row {
+  display: flex; gap: 10px; justify-content: flex-end;
+  margin-top: 4px;
+}
+.para-modal-ok {
+  background: #e0e0e0; color: #000; border: none;
+  border-radius: 6px; padding: 9px 20px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+}
+.para-modal-ok:hover { background: #fff; }
+.para-modal-cancel {
+  background: none; color: #555; border: none;
+  border-radius: 6px; padding: 9px 14px;
+  font-size: 13px; cursor: pointer; font-family: inherit;
+}
+.para-modal-cancel:hover { color: #aaa; }
+
+.para-section-opt-label { display: flex; align-items: center; gap: 8px; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/marked@13/marked.min.js"></script>
 </head>
@@ -1578,7 +1806,106 @@ const ID_TO_FILE = Object.fromEntries(Object.entries(FILE_MAP).map(([f,id])=>[id
 const CUSTOM_WF_KEY = 'habuild_custom_wf';
 let customWorkFiles = JSON.parse(localStorage.getItem(CUSTOM_WF_KEY) || '[]');
 const saveCustomWF = () => localStorage.setItem(CUSTOM_WF_KEY, JSON.stringify(customWorkFiles));
-const findFile = id => WORK_FILES.find(f=>f.id===id) || customWorkFiles.find(f=>f.id===id);
+
+// ── PARA Structure ─────────────────────────────────────────────────────────────
+const PARA_KEY = 'habuild_para';
+
+function getDefaultPARA() {
+  const builtInFiles = WORK_FILES.map(f => ({
+    id: f.id,
+    name: f.title,
+    content: f.content,
+    paraSection: 'areas',
+    deadline: null,
+    builtIn: true,
+    sc: f.sc,
+    group: f.group,
+    filename: ID_TO_FILE[f.id] || null,
+  }));
+  return { projects: [], areas: builtInFiles, resources: [], archives: [] };
+}
+
+function loadPARA() {
+  const raw = localStorage.getItem(PARA_KEY);
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      parsed.projects  = parsed.projects  || [];
+      parsed.areas     = parsed.areas     || [];
+      parsed.resources = parsed.resources || [];
+      parsed.archives  = parsed.archives  || [];
+      return parsed;
+    } catch(e) {}
+  }
+  const para = getDefaultPARA();
+  customWorkFiles.forEach(f => {
+    para.areas.push({
+      id: f.id, name: f.title, content: f.content || '',
+      paraSection: 'areas', deadline: null, builtIn: false,
+      sc: f.sc || 'ps-s', group: 'My Files', filename: f.filename || null,
+    });
+  });
+  savePARA(para);
+  return para;
+}
+
+function savePARA(para) {
+  localStorage.setItem(PARA_KEY, JSON.stringify(para));
+}
+
+let paraData = loadPARA();
+
+function findPARAFile(id) {
+  const all = [...paraData.projects, ...paraData.areas, ...paraData.resources, ...paraData.archives];
+  return all.find(f => f.id === id) || null;
+}
+
+function removePARAFile(id) {
+  ['projects','areas','resources','archives'].forEach(sec => {
+    paraData[sec] = paraData[sec].filter(f => f.id !== id);
+  });
+}
+
+function moveToPARASection(id, newSection) {
+  const file = findPARAFile(id);
+  if (!file) return;
+  removePARAFile(id);
+  file.paraSection = newSection;
+  paraData[newSection].push(file);
+  savePARA(paraData);
+}
+
+function deadlineInfo(dateStr) {
+  if (!dateStr) return null;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = new Date(dateStr + 'T00:00:00');
+  const diff = Math.round((d - today) / 86400000);
+  if (diff < 0)  return { label: 'Overdue', cls: 'para-deadline-overdue' };
+  if (diff <= 7) return { label: diff === 0 ? 'Today' : `${diff}d`, cls: 'para-deadline-soon' };
+  if (diff <= 30) return { label: `${diff}d`, cls: 'para-deadline-ok' };
+  const months = Math.round(diff / 30);
+  return { label: `${months}mo`, cls: 'para-deadline-ok' };
+}
+
+const PARA_META = {
+  projects:  { label: 'Projects',  dotClass: 'para-dot-projects',  desc: 'Active, with deadline' },
+  areas:     { label: 'Areas',     dotClass: 'para-dot-areas',     desc: 'Ongoing responsibilities' },
+  resources: { label: 'Resources', dotClass: 'para-dot-resources', desc: 'Reference material' },
+  archives:  { label: 'Archives',  dotClass: 'para-dot-archives',  desc: 'Collapsed, searchable' },
+};
+const PARA_ORDER = ['projects','areas','resources','archives'];
+
+const paraCollapsed = { projects: false, areas: false, resources: false, archives: true };
+
+function findFile(id) {
+  const wf = WORK_FILES.find(f => f.id === id);
+  if (wf) return wf;
+  const cf = customWorkFiles.find(f => f.id === id);
+  if (cf) return cf;
+  const pf = typeof paraData !== 'undefined' ? findPARAFile(id) : null;
+  if (pf) return { id: pf.id, title: pf.name, group: pf.group || 'My Files', sc: pf.sc || 'ps-s', content: pf.content || '', filename: pf.filename };
+  return null;
+}
 
 // ── File helpers ───────────────────────────────────────────────────────────────
 function getFileContent(id) {
@@ -1632,6 +1959,18 @@ function renderMarkdown(content, container, fileId) {
 
 // ── My Work: Notion layout ─────────────────────────────────────────────────────
 function renderMyWork() {
+  // Sync any new customWorkFiles into PARA areas
+  customWorkFiles.forEach(cf => {
+    if (!findPARAFile(cf.id)) {
+      paraData.areas.push({
+        id: cf.id, name: cf.title, content: cf.content || '',
+        paraSection: 'areas', deadline: null, builtIn: false,
+        sc: cf.sc || 'ps-s', group: cf.group || 'My Files',
+        filename: cf.filename || null,
+      });
+      savePARA(paraData);
+    }
+  });
   renderSidebar();
   renderFileContent(activeWorkFile || WORK_FILES[0].id);
 }
@@ -1749,31 +2088,376 @@ function showNewFileInput(sidebar, newBtn) {
   input.focus();
 }
 
-function renderSidebar() {
-  const sidebar = document.getElementById('mwSidebar'); if (!sidebar) return;
-  sidebar.innerHTML = '';
-  // Built-in groups
-  ['Projects','Research'].forEach(group => {
-    const files = WORK_FILES.filter(f => f.group === group);
-    if (!files.length) return;
-    const label = document.createElement('div'); label.className = 'mw-sidebar-group';
-    label.textContent = group; sidebar.appendChild(label);
-    files.forEach(f => sidebar.appendChild(mkSidebarItem(f, false)));
+// ── PARA Context Menu ──────────────────────────────────────────────────────────
+let _paraCtxMenu = null;
+
+function closeParaCtxMenu() {
+  if (_paraCtxMenu) { _paraCtxMenu.remove(); _paraCtxMenu = null; }
+}
+
+function openParaCtxMenu(e, fileEntry) {
+  e.preventDefault(); e.stopPropagation();
+  closeParaCtxMenu();
+
+  const menu = document.createElement('div');
+  menu.className = 'para-ctx-menu';
+  _paraCtxMenu = menu;
+
+  const lbl = document.createElement('div');
+  lbl.className = 'para-ctx-label'; lbl.textContent = 'Move to…';
+  menu.appendChild(lbl);
+
+  PARA_ORDER.forEach(sec => {
+    if (sec === fileEntry.paraSection) return;
+    const item = document.createElement('div');
+    item.className = 'para-ctx-item';
+    const dot = document.createElement('span');
+    dot.style.cssText = 'width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block;';
+    dot.className = PARA_META[sec].dotClass;
+    item.appendChild(dot);
+    item.appendChild(document.createTextNode(PARA_META[sec].label));
+    item.onclick = () => {
+      moveToPARASection(fileEntry.id, sec);
+      closeParaCtxMenu();
+      renderSidebar();
+      showToast('Moved to ' + PARA_META[sec].label);
+    };
+    menu.appendChild(item);
   });
-  // User-created files
-  if (customWorkFiles.length) {
-    const label = document.createElement('div'); label.className = 'mw-sidebar-group';
-    label.textContent = 'My Files'; sidebar.appendChild(label);
-    customWorkFiles.forEach(f => sidebar.appendChild(mkSidebarItem(f, true)));
+
+  const sep = document.createElement('div'); sep.className = 'para-ctx-sep';
+  menu.appendChild(sep);
+
+  const dlItem = document.createElement('div');
+  dlItem.className = 'para-ctx-item';
+  dlItem.textContent = fileEntry.deadline ? 'Change deadline…' : 'Set deadline…';
+  dlItem.onclick = () => { closeParaCtxMenu(); openDeadlineModal(fileEntry); };
+  menu.appendChild(dlItem);
+
+  if (fileEntry.deadline) {
+    const clearDl = document.createElement('div');
+    clearDl.className = 'para-ctx-item';
+    clearDl.textContent = 'Clear deadline';
+    clearDl.onclick = () => {
+      const f = findPARAFile(fileEntry.id);
+      if (f) { f.deadline = null; savePARA(paraData); }
+      closeParaCtxMenu();
+      renderSidebar();
+    };
+    menu.appendChild(clearDl);
   }
-  // New file button
-  const newBtn = document.createElement('button');
-  newBtn.style.cssText = 'display:flex;align-items:center;gap:6px;width:100%;padding:8px 20px;background:none;border:none;color:#555;font-size:12px;cursor:pointer;font-family:inherit;text-align:left;transition:color 0.12s;';
-  newBtn.innerHTML = '<span style="font-size:16px;font-weight:300;line-height:1">+</span> New file';
-  newBtn.onmouseover = () => newBtn.style.color = '#ccc';
-  newBtn.onmouseout  = () => newBtn.style.color = '#555';
-  newBtn.onclick = () => showNewFileInput(sidebar, newBtn);
-  sidebar.appendChild(newBtn);
+
+  if (!fileEntry.builtIn) {
+    const sep2 = document.createElement('div'); sep2.className = 'para-ctx-sep';
+    menu.appendChild(sep2);
+    const delItem = document.createElement('div');
+    delItem.className = 'para-ctx-item danger';
+    delItem.textContent = 'Delete file';
+    delItem.onclick = () => {
+      closeParaCtxMenu();
+      if (!confirm('Delete "' + fileEntry.name + '"? This cannot be undone.')) return;
+      removePARAFile(fileEntry.id);
+      savePARA(paraData);
+      customWorkFiles = customWorkFiles.filter(f => f.id !== fileEntry.id);
+      saveCustomWF();
+      localStorage.removeItem('habuild_mw_v_' + fileEntry.id);
+      if (activeWorkFile === fileEntry.id) {
+        const first = [...paraData.projects, ...paraData.areas, ...paraData.resources, ...paraData.archives][0];
+        activeWorkFile = first ? first.id : (WORK_FILES[0]?.id || null);
+        if (activeWorkFile) renderFileContent(activeWorkFile);
+      }
+      renderSidebar();
+      showToast('File deleted');
+    };
+    menu.appendChild(delItem);
+  }
+
+  document.body.appendChild(menu);
+
+  let x = e.clientX, y = e.clientY;
+  const mw = 190, mh = menu.offsetHeight || 200;
+  if (x + mw > window.innerWidth - 8) x = window.innerWidth - mw - 8;
+  if (y + mh > window.innerHeight - 8) y = window.innerHeight - mh - 8;
+  menu.style.left = Math.max(8, x) + 'px';
+  menu.style.top  = Math.max(8, y) + 'px';
+
+  setTimeout(() => {
+    document.addEventListener('click', function _closeCtx() {
+      closeParaCtxMenu();
+      document.removeEventListener('click', _closeCtx);
+    });
+  }, 0);
+}
+
+// ── Deadline modal ─────────────────────────────────────────────────────────────
+function openDeadlineModal(fileEntry) {
+  const ov = document.createElement('div');
+  ov.className = 'para-modal-overlay';
+  ov.onclick = () => ov.remove();
+
+  const modal = document.createElement('div');
+  modal.className = 'para-modal';
+  modal.onclick = e => e.stopPropagation();
+
+  const title = document.createElement('div');
+  title.className = 'para-modal-title';
+  title.textContent = 'Set deadline for "' + fileEntry.name + '"';
+  modal.appendChild(title);
+
+  const lbl = document.createElement('div');
+  lbl.className = 'para-modal-label'; lbl.textContent = 'Deadline date';
+  modal.appendChild(lbl);
+
+  const input = document.createElement('input');
+  input.type = 'date'; input.className = 'para-modal-input';
+  input.value = fileEntry.deadline || '';
+  input.style.colorScheme = 'dark';
+  modal.appendChild(input);
+
+  const row = document.createElement('div'); row.className = 'para-modal-row';
+  const cancel = document.createElement('button');
+  cancel.className = 'para-modal-cancel'; cancel.textContent = 'Cancel';
+  cancel.onclick = () => ov.remove();
+  const ok = document.createElement('button');
+  ok.className = 'para-modal-ok'; ok.textContent = 'Set deadline';
+  ok.onclick = () => {
+    const val = input.value;
+    const f = findPARAFile(fileEntry.id);
+    if (f) { f.deadline = val || null; savePARA(paraData); }
+    ov.remove();
+    renderSidebar();
+    if (val) showToast('Deadline set');
+  };
+  row.appendChild(cancel); row.appendChild(ok);
+  modal.appendChild(row);
+  ov.appendChild(modal);
+  document.body.appendChild(ov);
+  setTimeout(() => input.focus(), 50);
+}
+
+// ── New-file modal ─────────────────────────────────────────────────────────────
+function openNewFileModal(preferredSection) {
+  const ov = document.createElement('div');
+  ov.className = 'para-modal-overlay';
+  ov.onclick = () => ov.remove();
+
+  const modal = document.createElement('div');
+  modal.className = 'para-modal';
+  modal.onclick = e => e.stopPropagation();
+
+  const title = document.createElement('div');
+  title.className = 'para-modal-title'; title.textContent = 'New file';
+  modal.appendChild(title);
+
+  const nameLbl = document.createElement('div');
+  nameLbl.className = 'para-modal-label'; nameLbl.textContent = 'File name';
+  modal.appendChild(nameLbl);
+  const nameInput = document.createElement('input');
+  nameInput.className = 'para-modal-input';
+  nameInput.placeholder = 'e.g. Q1 OKRs, Research Notes…';
+  modal.appendChild(nameInput);
+
+  const secLbl = document.createElement('div');
+  secLbl.className = 'para-modal-label'; secLbl.textContent = 'PARA section';
+  modal.appendChild(secLbl);
+  const secSel = document.createElement('select');
+  secSel.className = 'para-modal-select';
+  PARA_ORDER.forEach(sec => {
+    const opt = document.createElement('option');
+    opt.value = sec;
+    opt.textContent = PARA_META[sec].label + ' — ' + PARA_META[sec].desc;
+    if (sec === (preferredSection || 'areas')) opt.selected = true;
+    secSel.appendChild(opt);
+  });
+  modal.appendChild(secSel);
+
+  const dlLbl = document.createElement('div');
+  dlLbl.className = 'para-modal-label'; dlLbl.textContent = 'Deadline (optional)';
+  modal.appendChild(dlLbl);
+  const dlInput = document.createElement('input');
+  dlInput.type = 'date'; dlInput.className = 'para-modal-input';
+  dlInput.style.colorScheme = 'dark';
+  modal.appendChild(dlInput);
+
+  function updateDeadlineVis() {
+    const show = secSel.value === 'projects';
+    dlLbl.style.display = show ? '' : 'none';
+    dlInput.style.display = show ? '' : 'none';
+  }
+  secSel.onchange = updateDeadlineVis;
+  updateDeadlineVis();
+
+  const row = document.createElement('div'); row.className = 'para-modal-row';
+  const cancel = document.createElement('button');
+  cancel.className = 'para-modal-cancel'; cancel.textContent = 'Cancel';
+  cancel.onclick = () => ov.remove();
+  const ok = document.createElement('button');
+  ok.className = 'para-modal-ok'; ok.textContent = 'Create';
+  ok.onclick = () => {
+    const name = nameInput.value.trim();
+    if (!name) { nameInput.focus(); return; }
+    const section = secSel.value;
+    const deadline = section === 'projects' ? (dlInput.value || null) : null;
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    const id = 'custom_' + slug + '_' + Date.now();
+    const filename = slug + '.md';
+    const content = '# ' + name + '\n\n';
+    const newEntry = { id, name, content, paraSection: section, deadline, builtIn: false, sc: 'ps-s', group: 'My Files', filename };
+    paraData[section].push(newEntry);
+    savePARA(paraData);
+    const legacyEntry = { id, title: name, group: 'My Files', sc: 'ps-s', filename, content };
+    customWorkFiles.push(legacyEntry);
+    saveCustomWF();
+    ov.remove();
+    if (section === 'archives') paraCollapsed.archives = false;
+    paraCollapsed[section] = false;
+    renderSidebar();
+    activeWorkFile = id;
+    renderFileContent(id);
+    if (dirHandle) writeToFile(id, content);
+    showToast('Created in ' + PARA_META[section].label);
+  };
+  nameInput.onkeydown = e => {
+    e.stopPropagation();
+    if (e.key === 'Enter') ok.onclick();
+    if (e.key === 'Escape') cancel.onclick();
+  };
+  row.appendChild(cancel); row.appendChild(ok);
+  modal.appendChild(row);
+  ov.appendChild(modal);
+  document.body.appendChild(ov);
+  setTimeout(() => nameInput.focus(), 50);
+}
+
+// ── Build a PARA file item ─────────────────────────────────────────────────────
+function mkPARAFileItem(fileEntry) {
+  const item = document.createElement('div');
+  item.className = 'para-file-item' + (fileEntry.id === activeWorkFile ? ' active' : '');
+
+  const emoji = getFileEmoji(fileEntry.id);
+  if (emoji) {
+    const ic = document.createElement('span');
+    ic.className = 'para-file-icon'; ic.textContent = emoji;
+    item.appendChild(ic);
+  } else {
+    const dot = document.createElement('span');
+    dot.className = 'para-file-dot ' + PARA_META[fileEntry.paraSection].dotClass;
+    item.appendChild(dot);
+  }
+
+  const name = document.createElement('span');
+  name.className = 'para-file-name';
+  name.textContent = fileEntry.name;
+  item.appendChild(name);
+
+  if (fileEntry.deadline) {
+    const info = deadlineInfo(fileEntry.deadline);
+    if (info) {
+      const badge = document.createElement('span');
+      badge.className = 'para-deadline-badge ' + info.cls;
+      badge.textContent = info.label;
+      badge.title = fileEntry.deadline;
+      item.appendChild(badge);
+    }
+  }
+
+  if (!fileEntry.builtIn) {
+    const del = document.createElement('button');
+    del.className = 'para-file-del'; del.innerHTML = '&times;';
+    del.title = 'Delete file';
+    del.onclick = e => {
+      e.stopPropagation();
+      if (!confirm('Delete "' + fileEntry.name + '"?')) return;
+      removePARAFile(fileEntry.id);
+      savePARA(paraData);
+      customWorkFiles = customWorkFiles.filter(f => f.id !== fileEntry.id);
+      saveCustomWF();
+      localStorage.removeItem('habuild_mw_v_' + fileEntry.id);
+      if (activeWorkFile === fileEntry.id) {
+        const first = [...paraData.projects, ...paraData.areas, ...paraData.resources, ...paraData.archives][0];
+        activeWorkFile = first ? first.id : (WORK_FILES[0]?.id || null);
+        if (activeWorkFile) renderFileContent(activeWorkFile);
+      }
+      renderSidebar();
+    };
+    item.appendChild(del);
+  }
+
+  item.onclick = () => {
+    activeWorkFile = fileEntry.id;
+    document.getElementById('mwSidebar')?.querySelectorAll('.para-file-item')
+      .forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    renderFileContent(fileEntry.id);
+  };
+
+  item.addEventListener('contextmenu', e => openParaCtxMenu(e, fileEntry));
+  return item;
+}
+
+// ── PARA Sidebar render ────────────────────────────────────────────────────────
+function renderPARASidebar() {
+  const sidebar = document.getElementById('mwSidebar');
+  if (!sidebar) return;
+  sidebar.innerHTML = '';
+
+  PARA_ORDER.forEach(secKey => {
+    const meta = PARA_META[secKey];
+    const files = paraData[secKey];
+    const isOpen = !paraCollapsed[secKey];
+
+    const section = document.createElement('div');
+    section.className = 'para-section' + (isOpen ? ' open' : '');
+
+    const header = document.createElement('div');
+    header.className = 'para-section-header';
+
+    const chevron = document.createElement('span');
+    chevron.className = 'para-section-chevron'; chevron.textContent = '▶';
+    header.appendChild(chevron);
+
+    const dot = document.createElement('span');
+    dot.style.cssText = 'width:7px;height:7px;border-radius:50%;flex-shrink:0;';
+    dot.className = meta.dotClass;
+    header.appendChild(dot);
+
+    const label = document.createElement('span');
+    label.className = 'para-section-label'; label.textContent = meta.label;
+    header.appendChild(label);
+
+    const count = document.createElement('span');
+    count.className = 'para-section-count'; count.textContent = files.length || '';
+    header.appendChild(count);
+
+    header.onclick = () => {
+      paraCollapsed[secKey] = !paraCollapsed[secKey];
+      section.classList.toggle('open', !paraCollapsed[secKey]);
+    };
+    section.appendChild(header);
+
+    const body = document.createElement('div');
+    body.className = 'para-section-body';
+    files.forEach(f => body.appendChild(mkPARAFileItem(f)));
+
+    const newBtn = document.createElement('button');
+    newBtn.className = 'para-new-file-btn';
+    newBtn.innerHTML = '<span style="font-size:14px;font-weight:300;line-height:1">+</span> New file here';
+    newBtn.onclick = e => { e.stopPropagation(); openNewFileModal(secKey); };
+    body.appendChild(newBtn);
+
+    section.appendChild(body);
+    sidebar.appendChild(section);
+  });
+
+  const globalNew = document.createElement('button');
+  globalNew.className = 'para-global-new';
+  globalNew.innerHTML = '<span style="font-size:16px;font-weight:300;line-height:1">+</span> New file…';
+  globalNew.onclick = () => openNewFileModal('areas');
+  sidebar.appendChild(globalNew);
+}
+
+function renderSidebar() {
+  renderPARASidebar();
 }
 
 function renderFileContent(fileId) {
@@ -2825,7 +3509,12 @@ function updateCmdPalActive(items) {
 
 function renderCmdPalList(query, list) {
   list.innerHTML = '';
-  const allFiles = [...WORK_FILES, ...customWorkFiles];
+  const paraAllFiles = [...paraData.projects, ...paraData.areas, ...paraData.resources, ...paraData.archives];
+  const allFiles = paraAllFiles.map(f => ({
+    id: f.id,
+    title: f.name,
+    group: PARA_META[f.paraSection]?.label || f.group || 'My Files',
+  }));
   const q = query.toLowerCase();
   const filtered = q ? allFiles.filter(f => f.title.toLowerCase().includes(q)) : allFiles;
 
@@ -3209,6 +3898,125 @@ applyMode();
 (function patchSwitchTab() {
   const _origSwitch = window.switchTab;
   window.switchTab = function(tab) { _origSwitch(tab); setTimeout(() => applyMode(), 0); };
+})();
+
+// ═══════════════════════════════════════════════════════════════════
+// Progressive Summarization — Distill Feature
+// ═══════════════════════════════════════════════════════════════════
+const SUMMARY_KEY     = 'habuild_summaries';
+const LAST_OPENED_KEY = 'habuild_last_opened';
+function getSummaries() { return JSON.parse(localStorage.getItem(SUMMARY_KEY)||'{}'); }
+function saveSummary(fileId,text) { const s=getSummaries(); s[fileId]=text; localStorage.setItem(SUMMARY_KEY,JSON.stringify(s)); }
+function getSummary(fileId) { return getSummaries()[fileId]||''; }
+function getLastOpened() { return JSON.parse(localStorage.getItem(LAST_OPENED_KEY)||'{}'); }
+function recordOpen(fileId) { const lo=getLastOpened(); lo[fileId]=new Date().toISOString(); localStorage.setItem(LAST_OPENED_KEY,JSON.stringify(lo)); }
+function hasOpenedBefore(fileId) { return !!getLastOpened()[fileId]; }
+function fileHasMarks(fileId) { const html=localStorage.getItem('habuild_mw_v_'+fileId)||''; return html.includes('class="l2"')||html.includes('class="l3"'); }
+
+function wrapSelectionInMark(className) {
+  const sel=window.getSelection(); if(!sel||sel.isCollapsed||!sel.rangeCount) return;
+  const editable=document.querySelector('.mw-editable'); if(!editable||!editable.contains(sel.anchorNode)) return;
+  const range=sel.getRangeAt(0); const mark=document.createElement('mark'); mark.className=className;
+  try { range.surroundContents(mark); } catch(e) { const frag=range.extractContents(); mark.appendChild(frag); range.insertNode(mark); }
+  sel.removeAllRanges(); const newRange=document.createRange(); newRange.selectNodeContents(mark); newRange.collapse(false); sel.addRange(newRange);
+  editable.dispatchEvent(new Event('input',{bubbles:true})); renderSidebar();
+}
+
+let _psActiveLayer='full';
+function setPSLayer(layer,fileId) {
+  _psActiveLayer=layer; const mwMain=document.getElementById('mwContent'); if(!mwMain) return;
+  mwMain.classList.remove('ps-view-bold','ps-view-key','ps-view-summary');
+  if(layer==='bold') mwMain.classList.add('ps-view-bold');
+  if(layer==='key')  mwMain.classList.add('ps-view-key');
+  if(layer==='summary') mwMain.classList.add('ps-view-summary');
+  mwMain.querySelectorAll('.ps-layer-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.layer===layer));
+  if(layer==='summary') { const sb=mwMain.querySelector('.ps-summary-block'); if(sb) { const body=sb.querySelector('.ps-summary-body'); const caret=sb.querySelector('.ps-summary-caret'); if(body) body.style.display=''; if(caret) caret.classList.add('open'); } }
+}
+
+function buildSummaryBlock(fileId) {
+  const block=document.createElement('div'); block.className='ps-summary-block';
+  const header=document.createElement('div'); header.className='ps-summary-header';
+  const label=document.createElement('span'); label.className='ps-summary-label'; label.textContent='Executive Summary';
+  const caret=document.createElement('span'); caret.className='ps-summary-caret'; caret.textContent='▾';
+  header.appendChild(label); header.appendChild(caret);
+  const body=document.createElement('div'); body.className='ps-summary-body'; body.style.display='none';
+  const ta=document.createElement('textarea'); ta.className='ps-summary-ta'; ta.placeholder='Executive Summary — write in your own words.'; ta.value=getSummary(fileId); ta.rows=4;
+  ta.addEventListener('input',()=>saveSummary(fileId,ta.value)); ta.addEventListener('keydown',e=>e.stopPropagation());
+  body.appendChild(ta); block.appendChild(header); block.appendChild(body);
+  header.addEventListener('click',()=>{ const isOpen=body.style.display!=='none'; body.style.display=isOpen?'none':''; caret.classList.toggle('open',!isOpen); if(!isOpen) setTimeout(()=>ta.focus(),0); });
+  return block;
+}
+
+function buildCampsiteBanner() {
+  const banner=document.createElement('div'); banner.className='ps-campsite-banner';
+  const msg=document.createElement('span'); msg.textContent='You\'ve been here before — add one highlight to make this more useful';
+  const close=document.createElement('button'); close.className='ps-campsite-close'; close.innerHTML='&times;'; close.title='Dismiss'; close.onclick=()=>banner.remove();
+  banner.appendChild(msg); banner.appendChild(close); return banner;
+}
+
+function buildLayerBar(fileId) {
+  const bar=document.createElement('div'); bar.className='ps-layer-bar';
+  const label=document.createElement('span'); label.className='ps-layer-label'; label.textContent='View'; bar.appendChild(label);
+  [{ id:'full',label:'Full' },{ id:'bold',label:'Bold' },{ id:'key',label:'Key' },{ id:'summary',label:'Summary' }].forEach(l=>{
+    const btn=document.createElement('button'); btn.className='ps-layer-btn'+(l.id===_psActiveLayer?' active':''); btn.textContent=l.label; btn.dataset.layer=l.id;
+    btn.onclick=()=>setPSLayer(l.id,fileId); bar.appendChild(btn);
+  });
+  const sp=document.createElement('span'); sp.style.flex='1'; bar.appendChild(sp);
+  const markBtn=document.createElement('button'); markBtn.className='ps-mark-btn'; markBtn.title='Mark Important (Cmd+Shift+M)';
+  markBtn.innerHTML='<span style="text-decoration:underline;text-decoration-color:#555;text-underline-offset:3px;">M</span> Mark';
+  markBtn.onmousedown=e=>{e.preventDefault();wrapSelectionInMark('l2');}; bar.appendChild(markBtn);
+  const hlBtn=document.createElement('button'); hlBtn.className='ps-hl-btn'; hlBtn.title='Highlight Key (Cmd+Shift+H)';
+  hlBtn.innerHTML='<span style="background:rgba(251,191,36,0.25);border-radius:2px;padding:0 2px;color:#fbbf24;">H</span> Key';
+  hlBtn.onmousedown=e=>{e.preventDefault();wrapSelectionInMark('l3');}; bar.appendChild(hlBtn);
+  return bar;
+}
+
+document.addEventListener('keydown', e => {
+  const editable=document.querySelector('.mw-editable'); if(!editable) return;
+  const sel=window.getSelection(); if(!sel||sel.isCollapsed||!editable.contains(sel.anchorNode)) return;
+  const isMeta=e.metaKey||e.ctrlKey;
+  if(isMeta&&e.shiftKey&&e.key==='M') { e.preventDefault(); wrapSelectionInMark('l2'); }
+  if(isMeta&&e.shiftKey&&e.key==='H') { e.preventDefault(); wrapSelectionInMark('l3'); }
+});
+
+(function patchMkSidebarItem() {
+  const _origMkSI=window.mkSidebarItem;
+  window.mkSidebarItem=function(f,deletable) {
+    const item=_origMkSI(f,deletable);
+    if(!fileHasMarks(f.id)) {
+      const badge=document.createElement('span'); badge.className='ps-unrefined-badge'; badge.textContent='unrefined';
+      badge.title='No highlights yet — try Cmd+Shift+H to mark key passages';
+      const delBtn=item.querySelector('button[title="Delete file"]');
+      if(delBtn) item.insertBefore(badge,delBtn); else item.appendChild(badge);
+    }
+    return item;
+  };
+})();
+
+(function patchRenderFileContentPS() {
+  const _origRFC=window.renderFileContent;
+  window.renderFileContent=function(fileId) {
+    _psActiveLayer='full'; const mwMain=document.getElementById('mwContent');
+    if(mwMain) mwMain.classList.remove('ps-view-bold','ps-view-key','ps-view-summary');
+    _origRFC(fileId);
+    const area=document.getElementById('mwContent'); if(!area) return;
+    if(hasOpenedBefore(fileId)&&!fileHasMarks(fileId)) {
+      const editable=area.querySelector('.mw-editable');
+      if(editable) area.insertBefore(buildCampsiteBanner(),editable); else area.appendChild(buildCampsiteBanner());
+    }
+    const actionsBar=area.querySelector('.mw-file-actions'); const layerBar=buildLayerBar(fileId);
+    if(actionsBar) actionsBar.insertAdjacentElement('afterend',layerBar); else area.insertBefore(layerBar,area.firstChild);
+    const editable=area.querySelector('.mw-editable'); const summaryBlock=buildSummaryBlock(fileId);
+    if(editable) area.insertBefore(summaryBlock,editable); else area.appendChild(summaryBlock);
+    if(typeof _selToolbar!=='undefined'&&_selToolbar&&!_selToolbar.querySelector('.ps-l2-btn')) {
+      const sep=document.createElement('div'); sep.className='mw-sel-sep'; _selToolbar.appendChild(sep);
+      const l2Btn=document.createElement('button'); l2Btn.className='mw-sel-btn ps-l2-btn'; l2Btn.title='Mark Important'; l2Btn.textContent='Mark';
+      l2Btn.onmousedown=e=>{e.preventDefault();wrapSelectionInMark('l2');}; _selToolbar.appendChild(l2Btn);
+      const l3Btn=document.createElement('button'); l3Btn.className='mw-sel-btn ps-l3-btn'; l3Btn.title='Highlight Key'; l3Btn.textContent='Key';
+      l3Btn.onmousedown=e=>{e.preventDefault();wrapSelectionInMark('l3');}; _selToolbar.appendChild(l3Btn);
+    }
+    recordOpen(fileId);
+  };
 })();
 </script>
 </body>
