@@ -996,15 +996,8 @@ mark.l3 { background:rgba(251,191,36,0.15);color:inherit;border-radius:2px;paddi
       <div class="greeting">Daily Planner</div>
       <div class="date-heading" id="dateDisplay"></div>
     </div>
-    <div id="northStarPanel"></div>
   </div>
   <div class="progress-row">
-    <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
-    <div class="prog-txt" id="pTxt">0 / 0</div>
-    <div class="mode-toggle" id="modeToggle">
-      <button class="mode-pill" id="modeExplore" onclick="setMode('explore')">Explore</button>
-      <button class="mode-pill" id="modeExecute" onclick="setMode('execute')">Execute</button>
-    </div>
     <button class="bridge-btn" onclick="openBridgeModal()">End Session</button>
     <button class="granola-btn" id="granolaBtn" onclick="toggleGranola()">Connect Granola</button>
   </div>
@@ -1059,54 +1052,42 @@ document.getElementById('dateDisplay').textContent=`${D[t.getDay()]}, ${t.getDat
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const DEFAULTS=[
-  {id:'data',label:'Data Work',dot:'d-data',tasks:[
-    {id:'d1',label:'Pull 14-day free trial users data — activation, retention curve, drop-off, conversion',tag:'14-day trial',tc:'t-data',done:false},
-    {id:'d2',label:'Check user call data for cognitive games (Viyu, Kramika, Mind Math)',tag:'cognitive games',tc:'t-data',done:false},
-    {id:'d3',label:'Review weekly active user retention for games — when Ashutosh shares',tag:'cognitive games',tc:'t-data',done:false},
+  {id:'box',label:'Box Breathing',dot:'d-focus',tasks:[
+    {id:'b1',label:'Close out Phase 3 PRD open questions',tag:'box breathing',tc:'t-focus',done:false},
+    {id:'b2',label:'Follow up — Pooja (Phase 2 backend)',tag:'box breathing',tc:'t-coord',done:false},
+    {id:'b3',label:'Follow up — Bala (WhatsApp-alike UI ticket)',tag:'box breathing',tc:'t-coord',done:false},
+    {id:'b4',label:'Follow up — Himanshu (settings bugs: audio toggle, change-time deep-link)',tag:'box breathing',tc:'t-coord',done:false},
   ]},
-  {id:'coord',label:'Coordination Work',dot:'d-coord',tasks:[
-    {id:'c1',label:'Messaged Ayush — A/B testing setup timeline',tag:'A/B testing',tc:'t-coord',done:true},
-    {id:'c2',label:'Messaged Ritik — TV app onboarding tutorial video brief',tag:'TV app',tc:'t-coord',done:true},
-    {id:'c3',label:'Messaged Ashutosh — cognitive games tasks',tag:'cognitive games',tc:'t-coord',done:true},
-    {id:'c4',label:'Spoke to Deba (designer) — dynamic homescreen',tag:'homescreen',tc:'t-coord',done:true},
-    {id:'c5',label:'Sync with Bala — Mobile CRM capabilities',tag:'notifications',tc:'t-coord',done:false},
+  {id:'recipes',label:'Recipes',dot:'d-data',tasks:[
+    {id:'r1',label:'Recipes Tab PRD → engineering review',tag:'recipes',tc:'t-data',done:false},
+    {id:'r2',label:'Hand Figma file to Deba for design pass',tag:'recipes',tc:'t-coord',done:false},
   ]},
-  {id:'calls',label:'User Call Work',dot:'d-calls',tasks:[
-    {id:'u1',label:'Define screener + interview guide for user calls',tag:'research',tc:'t-calls',done:false},
-    {id:'u2',label:'Run first 2–3 user calls — understand full wellness day',tag:'research',tc:'t-calls',done:false},
-    {id:'u3',label:'User calls for cognitive games — W4–W5 churn users',tag:'cognitive games',tc:'t-calls',done:false},
-    {id:'u4',label:'User calls — users who clicked on share',tag:'cognitive games',tc:'t-calls',done:false},
-  ]},
-  {id:'focus',label:'Focus Hour Work',dot:'d-focus',tasks:[
-    {id:'f1',label:'Read Mind Math document',tag:'cognitive games',tc:'t-focus',done:false},
-    {id:'f2',label:'Read cognitive games research doc + slides from Ashutosh',tag:'cognitive games',tc:'t-focus',done:false},
-    {id:'f3',label:'Think of unbiased cohort for difficulty testing',tag:'cognitive games',tc:'t-focus',done:false},
-    {id:'f4',label:'Think through TV app GTM positioning + onboarding flow',tag:'TV app',tc:'t-focus',done:false},
-    {id:'f5',label:'Fill notification copy sheet by cohort',tag:'notifications',tc:'t-focus',done:false},
+  {id:'wfi',label:'WhatsApp First Interface',dot:'d-calls',tasks:[
+    {id:'w1',label:'Final round of testing',tag:'WFI',tc:'t-calls',done:false},
+    {id:'w2',label:'Hand to experiment cohort once testing closes',tag:'WFI',tc:'t-calls',done:false},
   ]},
 ];
 
 const TAGS=[
-  {l:'14-day trial',c:'t-data'},{l:'A/B testing',c:'t-coord'},{l:'TV app',c:'t-coord'},
-  {l:'cognitive games',c:'t-focus'},{l:'research',c:'t-calls'},{l:'notifications',c:'t-focus'},
-  {l:'homescreen',c:'t-coord'},{l:'no tag',c:'t-none'},
+  {l:'box breathing',c:'t-focus'},{l:'recipes',c:'t-data'},{l:'WFI',c:'t-calls'},
+  {l:'coordination',c:'t-coord'},{l:'no tag',c:'t-none'},
 ];
 
 const TAGS_KEY='habuild_tags';
 let customTags=JSON.parse(localStorage.getItem(TAGS_KEY)||'[]');
 const saveTags=()=>localStorage.setItem(TAGS_KEY,JSON.stringify(customTags));
 
-const KEY='habuild_v6';
-['habuild_tasks','habuild_v2','habuild_v3','habuild_v4','habuild_v5'].forEach(k=>localStorage.removeItem(k));
+const KEY='habuild_v7';
+['habuild_tasks','habuild_v2','habuild_v3','habuild_v4','habuild_v5','habuild_v6','habuild_v6_fu'].forEach(k=>localStorage.removeItem(k));
 
 const API_KEY_STORE='habuild_apikey';
 let apiKey=localStorage.getItem(API_KEY_STORE)||'';
 
 const DEFAULT_FOLLOWUPS=[
-  {id:'fu1',name:'Ayush',   initials:'AY',desc:'A/B testing timeline',        status:'waiting'},
-  {id:'fu2',name:'Bala',    initials:'BA',desc:'Mobile CRM — not messaged yet',status:'pending'},
-  {id:'fu3',name:'Ritik',   initials:'RI',desc:'TV app tutorial video',        status:'waiting'},
-  {id:'fu4',name:'Ashutosh',initials:'AS',desc:'Slides + Google Form + data',  status:'waiting'},
+  {id:'fu1',name:'Pooja',   initials:'PO',desc:'Box Breathing Phase 2 backend',   status:'waiting'},
+  {id:'fu2',name:'Bala',    initials:'BA',desc:'WhatsApp-alike UI ticket',         status:'waiting'},
+  {id:'fu3',name:'Himanshu',initials:'HS',desc:'Settings bugs (audio, deep-link)', status:'waiting'},
+  {id:'fu4',name:'Deba',    initials:'DE',desc:'Recipes Figma design pass',        status:'pending'},
 ];
 
 let data=JSON.parse(localStorage.getItem(KEY)||'null')||JSON.parse(JSON.stringify(DEFAULTS));
@@ -1347,8 +1328,8 @@ function addTask(sec){
 function updProg(){
   const all=document.querySelectorAll('.task').length;
   const done=document.querySelectorAll('.task.done').length;
-  document.getElementById('pFill').style.width=(all?Math.round(done/all*100):0)+'%';
-  document.getElementById('pTxt').textContent=done+' / '+all;
+  const fill=document.getElementById('pFill'); if(fill) fill.style.width=(all?Math.round(done/all*100):0)+'%';
+  const txt=document.getElementById('pTxt'); if(txt) txt.textContent=done+' / '+all;
 }
 function updCnt(sec){
   const el=document.getElementById('cnt-'+sec.id);
@@ -1742,6 +1723,168 @@ const WORK_FILES=[
   {id:"user-research-syn",title:"User Research Synthesis",group:"Research",sc:"ps-a",content:"# Habuild User Research Synthesis\n**Source**: Research - User Calls + Habuild User Research Analysis PDF\n**Last updated**: Feb 23, 2026\n\n---\n\n## User Segments Identified\n\n| Segment | Profile | Key Trait |\n|---|---|---|\n| Committed Homemaker | India, 40\u201360 yrs | High attendance, price sensitive, family decision maker |\n| Health-Driven Senior | India, 60\u201375 yrs | Strong yoga outcome, digital literacy gap, family helps with payment |\n| Indian Diaspora Woman | USA/Canada/Belgium/UK, 45\u201375 yrs | High income, wants international experience, very loyal |\n| Working Professional | India, 30\u201350 yrs | Irregular schedule, misses sessions due to travel/work |\n| Chronic Pain Seeker | India, various | Joined for specific condition (knee/back pain), high retention |\n| YouTube-to-Habuild Migrant | India, mixed | Organic discovery, may not convert to paid, high awareness of SB |\n\n---\n\n## Top 10 Themes from Research\n\n1. **Physical health outcomes are real and documented** \u2014 users report knee pain, back pain, sinus, BP, weight loss improvements in 15\u201320 days\n2. **Saurabh Bothra's teaching style is irreplaceable** \u2014 language, forgiving attitude, \"jitna chaahe kar lijiye\" framing is the core retention driver\n3. **WhatsApp is the primary product interface** \u2014 users join sessions via WA link, not the app. App is an afterthought for most\n4. **App feature awareness is near zero** \u2014 most users don't know what the app does beyond brain games\n5. **Payment page UX failures are causing direct revenue loss** \u2014 multiple users tried to pay, couldn't due to form issues (name/email fields not working, GPay number mismatch)\n6. **Affordability is a real barrier** \u2014 \"\u20b94000 ek saath dena tough hai\" \u2014 monthly/quarterly plans would unlock a significant segment\n7. **No recordings = barrier for inconsistent users** \u2014 working professionals, travellers want to catch up on missed sessions\n8. **Schedule rigidity hurts working users** \u2014 can't always make live sessions, no fallback\n9. **Evening batch has a motivation problem** \u2014 not about the teacher, about habit formation in evenings vs mornings\n10. **App login friction** \u2014 entering phone number daily is painful; users don't return to app because of this\n\n---\n\n## Why Users Didn't Pay (Non-Conversion Reasons)\n\n| Reason | Notes |\n|---|---|\n| Payment page technical failure | Name/email fields not submitting, GPay number different from WA number |\n| Can't afford \u20b93999 upfront | Monthly plan would help \u2014 \"500/month toh de dete\" |\n| Waiting for family member to help | Son/husband handles digital payments |\n| Life disruption (travel, illness, exams) | Deferred intent \u2014 likely to return |\n| Low attendance guilt | \"I only do it 2\u20133x/week, feels like wasting money if I subscribe\" |\n| Routine not yet established | Still in trial phase, not convinced of consistency yet |\n\n---\n\n## What Users Love\n\n- Saurabh Bothra's teaching \u2014 tone, clarity, forgiving approach\n- Physical results in 15\u201320 days (pain relief, flexibility, energy)\n- WhatsApp experience \u2014 reminders, support, 10/10 rated\n- Multiple time slots across the day\n- Community feel and scale (pride in GWR participation)\n- Sugar detox, nutrition content that comes via WA\n\n---\n\n## Pain Points & Friction\n\n### Payment & Conversion (CRITICAL \u2014 direct revenue loss)\n- Payment form UX failures (name, email, GPay number mismatch)\n- No monthly/quarterly plan \u2014 upfront \u20b93999 is too high for many\n- No easy escalation when payment fails\n\n### App Friction\n- Daily phone number entry to join session via app\n- No app recall among users \u2014 \"konsa app?\"\n- Features not discoverable \u2014 brain games, box breathing exist but unknown\n- No recorded sessions in app\n- \"App mein kuch nahi hai\" \u2014 minimal experience perception\n\n### Scheduling & Attendance\n- No recorded sessions for missed days\n- Evening batch has motivation gap (users keep intending but not attending)\n- Guilt from low attendance makes users less likely to pay\n\n### Communication & Language\n- Tamil/Marathi-speaking users struggle (interviews had language barriers)\n- Hindi-heavy communication may not work for South Indian users\n\n### Feature Discovery\n- Box breathing: very few have tried it \u2014 mostly because it's not surfaced\n- Brain games: low recall and engagement \u2014 \"not creative\", \"age ke liye theek nahi laga\"\n\n---\n\n## Surprising / Unexpected Findings\n\n1. **Referral reward program is NOT the referral driver** \u2014 word of mouth is organic (sister, beti ki saas, friend)\n2. **Research phone calls themselves function as retention** \u2014 users who got called felt seen and were more likely to continue\n3. **Live sessions beat recordings as engagement hook** \u2014 users specifically prefer live even when recordings would be more convenient\n4. **App is used as a \"did I forget something\" tool** \u2014 not a daily driver\n5. **Procrastination is named as a genuine product problem** \u2014 users self-aware but can't solve it\n6. **Users calculating Habuild's revenue with appreciation, not resentment** \u2014 very positive brand sentiment\n7. **Evening batch motivation is contextual** \u2014 morning habit is strong, evening habit doesn't form the same way\n\n---\n\n## Actionable Recommendations (from Research)\n\n| Priority | Recommendation |\n|---|---|\n| CRITICAL | Fix payment flow immediately \u2014 form bugs, GPay flow |\n| High | Introduce monthly/quarterly pricing tier |\n| High | Build missed session backlog + recorded sessions access |\n| High | Redesign app's role in user journey |\n| Medium-High | Dedicated international/diaspora experience |\n| Medium | Re-engagement flow for lapsed users |\n| Medium | Realign referral incentives |\n| Medium | Improve onboarding for new registrants |\n| Medium | Condition-specific content discovery (knee, BP, PCOD) |\n| Low-Medium | Address evening batch experience specifically |\n\n---\n\n## Key User Quotes\n\n> \"Naam daalo email daalo jama nahi\" \u2014 payment form not working, user couldn't pay\n\n> \"\u20b94000 ek saath dena tough hai, 500/month toh de dete\"\n\n> \"App mein kuch nahi hai\" \u2014 user perception of empty app\n\n> \"Rozz number daalna padta hai isliye nahi karti use\" \u2014 login friction kills daily app use\n\n> \"WhatsApp service I will rate 10/10\" \u2014 WA is the gold standard in their eyes\n\n> \"Me baahar hoon ghar pahunch ke call back karte hoon\" (Adit Sahney) \u2014 users are living busy lives\n\n> \"Subah uthke Saurabh sir ko dekhti hoon bas sab theek ho jaata hai\" \u2014 emotional connection to SB is real\n\n> \"Live sessions pe jab karti hoon tab class miss karna nahi chahti\" \u2014 live creates commitment that recordings can't\n\n> \"I was hooked with game so I didn't download again\" \u2014 app game engagement exists but login re-friction kills it\n"}
 ];
 
+// ── Current work (added 2026-05-27) — overrides the Work Plan + adds active projects ──
+const OVERVIEW_CONTENT = `# Habuild PM — Work Plan
+**Last updated**: May 27, 2026
+**Owner**: Khushi
+
+---
+
+## North Star
+> Figure out what to build with or apart from Yoga to add more value in members' health & wellness journey.
+
+---
+
+## Active Projects
+
+| # | Project | Status |
+| --- | --- | --- |
+| 1 | Box Breathing | Active — heaviest track |
+| 2 | Recipes Tab | PRD with engineering |
+| 3 | WhatsApp First Interface | Final testing → experiment |
+
+---
+
+## This Week
+
+### Box Breathing
+- [ ] Close out Phase 3 PRD open questions
+- [ ] Follow up — Pooja (Phase 2 backend)
+- [ ] Follow up — Bala (WhatsApp-alike UI ticket)
+- [ ] Follow up — Himanshu (settings bugs: audio toggle, change-time deep-link)
+
+### Recipes
+- [ ] Recipes Tab PRD → engineering review
+- [ ] Hand Figma file to Deba for design pass
+
+### WhatsApp First Interface
+- [ ] Final round of testing
+- [ ] Hand to experiment cohort once testing closes
+
+---
+
+## Archive
+Older Feb–Mar work (14-day trial, A/B infra, dynamic homescreen, notifications, TV app, cognitive games, content categorisation, product direction, user research synthesis) is parked under **Archives** in My Work.
+`;
+
+const NEW_DOCS = [
+  {id:"box-breathing", title:"Box Breathing", group:"Projects", sc:"ps-a", paraSection:"projects", filename:"box-breathing.md", content:`# Box Breathing
+**Owner**: Khushi
+**Status**: Active — heaviest track
+**Last updated**: May 27, 2026
+
+---
+
+## Goal
+Make box breathing a real daily habit on the app — better onboarding, the right session controls, and a personalised entry point for first-timers.
+
+---
+
+## What we tried (prototype iterations)
+1. **Theme variant** — themed visual layer on the session screen
+2. **Settings variant** — theme toggle exposed vs hidden (how much control members want)
+3. **Onboarding flow** — explain box breathing before the first session
+4. **Lung-test onboarding** — short breath-hold check that prescribes a matching pattern (3-3-3-3, 4-4-4-4…)
+
+---
+
+## User research
+- WhatsApp test group (~150 members) — 1,100+ messages (May 6–21) synthesised into one insight PDF (ClickUp → Box Breathing page)
+- 56% did box breathing yesterday on app
+- 91% want SB's voice in the feature (P0)
+- Count selection is invisible (lives in settings)
+- Auto-stop timer is the second biggest unmet need
+
+---
+
+## Sprint handoffs
+- **Phase 2 backend** → Pooja
+- **WhatsApp-alike UI** ticket → Bala
+- **Settings bugs** (audio disable toggle, change-time deep-link) → Himanshu
+
+---
+
+## Phase 3 PRD — open questions
+- Member level / capability signal (onboarding question vs behaviour inference)
+- First-time onboarding + safety screen (BP / breath holds)
+- Settings: progression visibility & control (pause / opt out)
+- Reminder customisation — frequency vs time of reminders
+
+---
+
+## Links
+- Research base: \`~/Documents/Habuild/research/box-breathing/RESEARCH.md\`
+- Lung-test prototype: https://khushibagai-create.github.io/habuild-skill-assessment/
+- Funnel: \`analytics/box-breathing-funnel/funnel.html\`
+`},
+  {id:"recipes", title:"Recipes Tab", group:"Projects", sc:"ps-d", paraSection:"projects", filename:"recipes.md", content:`# Recipes Tab
+**Owner**: Khushi
+**Status**: PRD with engineering
+**Last updated**: May 27, 2026
+
+---
+
+## Goal
+Bring the recipe content into the app as a proper tab — booklet (canonical recipes) + member UGC variants.
+
+---
+
+## Journey
+1. **Round 1** — 5 prototype directions explored → narrowed to Recipe Locker
+2. **Round 2** — Nutrition Magazine prototype: 7-day journey on Feb micro-habit content, Supabase backend, English-only copy. Live with members.
+3. **Feedback** — 605-member group reviewed → 2–3 iterations made
+4. **PRD** — Recipes Tab PRD drafted (May 25) → ready for engineering review
+
+---
+
+## Headline findings
+- 67% want the WhatsApp image format unchanged
+- 53% want tips & tricks more than more recipes
+- 62% prefer WhatsApp over the app (fixable reasons)
+- 52% don't know the existing content tab exists
+
+---
+
+## Links
+- PRD: \`projects/prd-recipes-tab.md\`
+- Prototype: \`prototypes/recipe-features-nutrition-magazine.html\`
+- Round 2 synthesis: \`research/recipe-feedback-group-insights-2026-05-21.md\`
+`},
+  {id:"wfi", title:"WhatsApp First Interface", group:"Projects", sc:"ps-w", paraSection:"projects", filename:"wfi.md", content:`# WhatsApp First Interface (WFI)
+**Owner**: Khushi
+**Status**: Final testing → experiment
+**Last updated**: May 27, 2026
+
+---
+
+## What it is
+Chat-first home screen for the app — Experiment 2 of the retention plan. Tested vs the revamped home screen for paid members who never installed.
+
+---
+
+## Experiment design
+- **Cohort**: 50k installs, 25k per arm, India-only
+- **Window**: 2 weeks
+- **Baseline**: 12% Day 1 home-to-home retention
+- **Decision**: winner ships to 100%, loser deprecated
+
+---
+
+## This week
+1. Walked the **support team** through the full chat-first flow
+2. Collected their feedback — surfaced gaps + bugs early
+3. **Fixed** them
+4. **Final round of testing** → then hand to experiment cohort
+- Closed out the **Sunday-sessions** multi-session layout (option 2 → exported to Figma)
+
+---
+
+## Links
+- PRD: \`prototypes/chat-first-app/4-WFI-PRD.md\`
+- Prototypes: \`prototypes/chat-first-app/\`
+`},
+];
+
 let activeWorkFile = WORK_FILES[0].id;
 let _saveTimer = null;
 let currentTab = 'today';
@@ -1803,26 +1946,30 @@ const FILE_MAP = {
 const ID_TO_FILE = Object.fromEntries(Object.entries(FILE_MAP).map(([f,id])=>[id,f]));
 
 // ── Custom work files ──────────────────────────────────────────────────────────
-const CUSTOM_WF_KEY = 'habuild_custom_wf';
+const CUSTOM_WF_KEY = 'habuild_custom_wf_v2';
 let customWorkFiles = JSON.parse(localStorage.getItem(CUSTOM_WF_KEY) || '[]');
 const saveCustomWF = () => localStorage.setItem(CUSTOM_WF_KEY, JSON.stringify(customWorkFiles));
 
 // ── PARA Structure ─────────────────────────────────────────────────────────────
-const PARA_KEY = 'habuild_para';
+const PARA_KEY = 'habuild_para_v2';
 
 function getDefaultPARA() {
-  const builtInFiles = WORK_FILES.map(f => ({
+  const mk = (f, section) => ({
     id: f.id,
     name: f.title,
-    content: f.content,
-    paraSection: 'areas',
+    content: f.id === 'overview' ? OVERVIEW_CONTENT : f.content,
+    paraSection: section,
     deadline: null,
     builtIn: true,
     sc: f.sc,
     group: f.group,
-    filename: ID_TO_FILE[f.id] || null,
-  }));
-  return { projects: [], areas: builtInFiles, resources: [], archives: [] };
+    filename: ID_TO_FILE[f.id] || f.filename || null,
+  });
+  const projects = NEW_DOCS.map(f => mk(f, 'projects'));
+  const overview = WORK_FILES.find(f => f.id === 'overview');
+  const areas = overview ? [mk(overview, 'areas')] : [];
+  const archives = WORK_FILES.filter(f => f.id !== 'overview').map(f => mk(f, 'archives'));
+  return { projects, areas, resources: [], archives };
 }
 
 function loadPARA() {
@@ -3837,18 +3984,16 @@ let currentMode = getInitialMode();
 function setMode(mode) { currentMode = mode; localStorage.setItem(SESSION_MODE_KEY, JSON.stringify({mode,date:todayStr})); applyMode(); }
 
 function applyMode() {
-  const exploreBtn = document.getElementById('modeExplore'); const executeBtn = document.getElementById('modeExecute');
-  if (exploreBtn && executeBtn) {
-    exploreBtn.className = 'mode-pill'+(currentMode==='explore'?' active-explore':'');
-    executeBtn.className = 'mode-pill'+(currentMode==='execute'?' active-execute':'');
-  }
-  document.body.classList.toggle('explore-mode', currentMode==='explore');
+  // Diverge/Converge (Explore/Execute) mode removed — no mode banner, chat input always visible.
   const existing = document.getElementById('modeBanner'); if (existing) existing.remove();
-  const banner = document.createElement('div'); banner.id = 'modeBanner'; banner.className = 'mode-banner '+currentMode;
-  banner.textContent = currentMode==='explore' ? 'Explore mode — capture freely, don\'t act yet' : 'Execute mode — finish what you started';
-  const todayPane = document.getElementById('today-pane');
-  if (todayPane && todayPane.style.display !== 'none') todayPane.insertAdjacentElement('beforebegin', banner);
-  renderRelatedPanel(); applyInboxMode();
+  document.body.classList.remove('explore-mode');
+  const rp = document.getElementById('relatedPanel'); if (rp) rp.remove();
+  const chatBar = document.querySelector('.chat-bar');
+  if (chatBar) {
+    chatBar.classList.remove('execute-mode');
+    const inp = chatBar.querySelector('.chat-input'); const snd = chatBar.querySelector('.chat-send');
+    if (inp) inp.style.display = ''; if (snd) snd.style.display = '';
+  }
 }
 
 function renderRelatedPanel() {
