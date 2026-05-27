@@ -4,6 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Khushi — Daily Planner</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSdnJyB4MT0nMCcgeTE9JzAnIHgyPScxJyB5Mj0nMSc+PHN0b3Agb2Zmc2V0PScwJyBzdG9wLWNvbG9yPScjMzRkMzk5Jy8+PHN0b3Agb2Zmc2V0PScxJyBzdG9wLWNvbG9yPScjMDU5NjY5Jy8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9JzMyJyBoZWlnaHQ9JzMyJyByeD0nOCcgZmlsbD0ndXJsKCNnKScvPjxwYXRoIGQ9J004LjggMTYuNmw0LjggNC44TDIzLjIgMTAuNicgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzMnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcgc3Ryb2tlLWxpbmVqb2luPSdyb3VuZCcvPjwvc3ZnPg=="/>
+  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSdnJyB4MT0nMCcgeTE9JzAnIHgyPScxJyB5Mj0nMSc+PHN0b3Agb2Zmc2V0PScwJyBzdG9wLWNvbG9yPScjMzRkMzk5Jy8+PHN0b3Agb2Zmc2V0PScxJyBzdG9wLWNvbG9yPScjMDU5NjY5Jy8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9JzMyJyBoZWlnaHQ9JzMyJyByeD0nOCcgZmlsbD0ndXJsKCNnKScvPjxwYXRoIGQ9J004LjggMTYuNmw0LjggNC44TDIzLjIgMTAuNicgZmlsbD0nbm9uZScgc3Ryb2tlPScjZmZmZmZmJyBzdHJva2Utd2lkdGg9JzMnIHN0cm9rZS1saW5lY2FwPSdyb3VuZCcgc3Ryb2tlLWxpbmVqb2luPSdyb3VuZCcvPjwvc3ZnPg=="/>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -1052,19 +1054,21 @@ document.getElementById('dateDisplay').textContent=`${D[t.getDay()]}, ${t.getDat
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const DEFAULTS=[
-  {id:'box',label:'Box Breathing',dot:'d-focus',tasks:[
-    {id:'b1',label:'Close out Phase 3 PRD open questions',tag:'box breathing',tc:'t-focus',done:false},
-    {id:'b2',label:'Follow up — Pooja (Phase 2 backend)',tag:'box breathing',tc:'t-coord',done:false},
-    {id:'b3',label:'Follow up — Bala (WhatsApp-alike UI ticket)',tag:'box breathing',tc:'t-coord',done:false},
-    {id:'b4',label:'Follow up — Himanshu (settings bugs: audio toggle, change-time deep-link)',tag:'box breathing',tc:'t-coord',done:false},
+  {id:'deep',label:'Deep Work',dot:'d-focus',tasks:[
+    {id:'dw1',label:'Close out Box Breathing Phase 3 PRD open questions',tag:'box breathing',tc:'t-focus',done:false},
+    {id:'dw2',label:'Recipes Tab PRD → engineering review',tag:'recipes',tc:'t-data',done:false},
+    {id:'dw3',label:'WFI — final round of testing',tag:'WFI',tc:'t-calls',done:false},
   ]},
-  {id:'recipes',label:'Recipes',dot:'d-data',tasks:[
-    {id:'r1',label:'Recipes Tab PRD → engineering review',tag:'recipes',tc:'t-data',done:false},
-    {id:'r2',label:'Hand Figma file to Deba for design pass',tag:'recipes',tc:'t-coord',done:false},
+  {id:'coord',label:'Coordination Work',dot:'d-coord',tasks:[
+    {id:'cw1',label:'Follow up — Pooja (Box Breathing Phase 2 backend)',tag:'box breathing',tc:'t-focus',done:false},
+    {id:'cw2',label:'Follow up — Bala (WhatsApp-alike UI ticket)',tag:'box breathing',tc:'t-focus',done:false},
+    {id:'cw3',label:'Follow up — Himanshu (settings bugs: audio toggle, change-time deep-link)',tag:'box breathing',tc:'t-focus',done:false},
+    {id:'cw4',label:'Hand Figma file to Deba for design pass',tag:'recipes',tc:'t-data',done:false},
+    {id:'cw5',label:'Hand WFI to experiment cohort once testing closes',tag:'WFI',tc:'t-calls',done:false},
   ]},
-  {id:'wfi',label:'WhatsApp First Interface',dot:'d-calls',tasks:[
-    {id:'w1',label:'Final round of testing',tag:'WFI',tc:'t-calls',done:false},
-    {id:'w2',label:'Hand to experiment cohort once testing closes',tag:'WFI',tc:'t-calls',done:false},
+  {id:'data',label:'Data Work',dot:'d-data',tasks:[
+    {id:'da1',label:'Track WFI experiment retention vs 12% Day-1 baseline',tag:'WFI',tc:'t-calls',done:false},
+    {id:'da2',label:'Watch box-breathing funnel: banner → screen → start → completion',tag:'box breathing',tc:'t-focus',done:false},
   ]},
 ];
 
@@ -1077,8 +1081,8 @@ const TAGS_KEY='habuild_tags';
 let customTags=JSON.parse(localStorage.getItem(TAGS_KEY)||'[]');
 const saveTags=()=>localStorage.setItem(TAGS_KEY,JSON.stringify(customTags));
 
-const KEY='habuild_v7';
-['habuild_tasks','habuild_v2','habuild_v3','habuild_v4','habuild_v5','habuild_v6','habuild_v6_fu'].forEach(k=>localStorage.removeItem(k));
+const KEY='habuild_v8';
+['habuild_tasks','habuild_v2','habuild_v3','habuild_v4','habuild_v5','habuild_v6','habuild_v6_fu','habuild_v7','habuild_v7_fu'].forEach(k=>localStorage.removeItem(k));
 
 const API_KEY_STORE='habuild_apikey';
 let apiKey=localStorage.getItem(API_KEY_STORE)||'';
@@ -1439,15 +1443,9 @@ function renderSide(){
     <div class="side-block">
       <div class="side-title">Projects</div>
       ${[
-        {n:'01 User Research',      s:'Active',       c:'ps-a'},
-        {n:'02 14-Day Trial',       s:'Data needed',  c:'ps-w'},
-        {n:'03 A/B Infra',          s:'Waiting Ayush',c:'ps-w'},
-        {n:'04 Dynamic Homescreen', s:'With Deba',    c:'ps-d'},
-        {n:'05 Web Prototypes',     s:'Scoping',      c:'ps-s'},
-        {n:'06 Notifications',      s:'Active',       c:'ps-a'},
-        {n:'07 TV App',             s:'Active',       c:'ps-a'},
-        {n:'08 Cognitive Games',    s:'Active',       c:'ps-a'},
-        {n:'09 Content Strategy',   s:'Active',       c:'ps-a'},
+        {n:'Box Breathing',             s:'Active',      c:'ps-a'},
+        {n:'Recipes Tab',               s:'PRD review',  c:'ps-d'},
+        {n:'WhatsApp First Interface',  s:'Testing',     c:'ps-w'},
       ].map(p=>`<div class="proj"><span class="proj-name">${p.n}</span><span class="proj-s ${p.c}">${p.s}</span></div>`).join('')}
     </div>`);
 
