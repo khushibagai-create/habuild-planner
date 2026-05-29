@@ -752,6 +752,13 @@ body.explore-mode .task { border-bottom-color:#111820; }
 .inbox-tab-badge.visible { display:inline-block; }
 #inbox-pane { display:none;max-width:640px; }
 .inbox-empty { font-size:13px;color:#444;padding:48px 0;text-align:center; }
+.inbox-capture-row { display:flex;gap:8px;align-items:flex-start;margin-bottom:18px;background:#0f0f0f;border:1px solid #1e1e1e;border-radius:10px;padding:10px 12px; }
+.inbox-capture-row:focus-within { border-color:#34d399; }
+.inbox-capture-row textarea { flex:1;background:transparent;border:none;outline:none;color:#e0e0e0;font-family:inherit;font-size:14px;line-height:1.5;resize:none;min-height:22px;max-height:120px;padding:2px 0; }
+.inbox-capture-row textarea::placeholder { color:#444; }
+.inbox-capture-row button { background:#34d399;color:#0b1f17;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;align-self:flex-end; }
+.inbox-capture-row button:hover { background:#3ce0a4; }
+.inbox-capture-row button:disabled { background:#1e1e1e;color:#3a3a3a;cursor:not-allowed; }
 .inbox-card { background:#0f0f0f;border:1px solid #1e1e1e;border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;transition:border-color 0.15s; }
 .inbox-card:hover { border-color:#2a2a2a; }
 .inbox-card-text { font-size:14px;line-height:1.6;color:#d0d0d0;white-space:pre-wrap;word-break:break-word;margin-bottom:10px; }
@@ -1043,11 +1050,15 @@ mark.l3 { background:rgba(251,191,36,0.15);color:inherit;border-radius:2px;paddi
   <!-- Inbox tab -->
   <div id="inbox-pane">
     <div class="section" style="border-top:none;padding-top:0;">
-      <div class="sec-header" style="margin-bottom:20px;">
+      <div class="sec-header" style="margin-bottom:14px;">
         <div class="sec-dot" style="background:#ef4444;"></div>
         <div class="sec-title">Capture Inbox</div>
         <div class="sec-count" id="inboxCount"></div>
         <button class="clear-btn" id="inboxArchiveAllBtn" onclick="archiveAllInbox()" style="display:none;">archive all</button>
+      </div>
+      <div class="inbox-capture-row">
+        <textarea id="inboxCaptureInput" placeholder="Drop a thought, idea, or task. Enter to save." rows="1"></textarea>
+        <button id="inboxCaptureBtn" onclick="captureFromInbox()">Capture</button>
       </div>
       <div id="inboxList"></div>
     </div>
@@ -1957,7 +1968,7 @@ function switchTab(tab) {
     if (captureFab) captureFab.style.display = '';
     renderMyWork();
   } else if (tab === 'inbox') {
-    if (inboxPane)  inboxPane.style.display  = '';
+    if (inboxPane)  inboxPane.style.display  = 'block';
     if (chatBar)    chatBar.style.display    = 'none';
     if (captureFab) captureFab.style.display = '';
     renderInboxPane();
@@ -3908,6 +3919,30 @@ function doSaveCapture(text, resonance) {
   if (currentTab === 'inbox') renderInboxPane();
 }
 
+// Inline capture from the Inbox tab itself (no modal)
+function captureFromInbox() {
+  const input = document.getElementById('inboxCaptureInput'); if (!input) return;
+  const text = input.value.trim(); if (!text) return;
+  const items = loadInbox();
+  items.unshift({ id:'cap_'+Date.now()+'_'+Math.random().toString(36).slice(2), text:text, resonance:null, capturedAt:Date.now(), processed:false });
+  saveInbox(items); input.value = ''; input.style.height = ''; syncInboxBadges(); renderInboxPane(); input.focus();
+}
+function wireInboxCaptureInput() {
+  const input = document.getElementById('inboxCaptureInput');
+  const btn = document.getElementById('inboxCaptureBtn');
+  if (!input || !btn) return;
+  const refresh = () => {
+    btn.disabled = input.value.trim().length === 0;
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+  };
+  input.addEventListener('input', refresh);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); captureFromInbox(); }
+  });
+  refresh();
+}
+
 function renderInboxPane() {
   const list = document.getElementById('inboxList');
   const countEl = document.getElementById('inboxCount');
@@ -3941,14 +3976,62 @@ function mkInboxCard(item) {
   }
   card.appendChild(meta);
   const actions = document.createElement('div'); actions.className = 'inbox-card-actions';
-  const moveBtn = document.createElement('button'); moveBtn.className = 'inbox-action-btn primary'; moveBtn.textContent = 'Move to project →';
-  moveBtn.onclick = e => { e.stopPropagation(); showMoveDropdown(item, moveBtn, card); };
-  const todayBtn = document.createElement('button'); todayBtn.className = 'inbox-action-btn'; todayBtn.textContent = 'Add to today →';
-  todayBtn.onclick = () => inboxAddToToday(item, card);
+  const todayBtn = document.createElement('button'); todayBtn.className = 'inbox-action-btn primary'; todayBtn.textContent = '→ Today bucket';
+  todayBtn.onclick = e => { e.stopPropagation(); showMoveDropdown(item, todayBtn, card); };
+  const projBtn = document.createElement('button'); projBtn.className = 'inbox-action-btn'; projBtn.textContent = '→ Project doc';
+  projBtn.onclick = e => { e.stopPropagation(); showProjectDropdown(item, projBtn, card); };
+  const quickBtn = document.createElement('button'); quickBtn.className = 'inbox-action-btn'; quickBtn.textContent = '→ Today (auto)';
+  quickBtn.onclick = () => inboxAddToToday(item, card);
   const archiveBtn = document.createElement('button'); archiveBtn.className = 'inbox-action-btn danger'; archiveBtn.textContent = 'Archive';
   archiveBtn.onclick = () => inboxArchive(item.id, card);
-  actions.appendChild(moveBtn); actions.appendChild(todayBtn); actions.appendChild(archiveBtn);
+  actions.appendChild(todayBtn); actions.appendChild(projBtn); actions.appendChild(quickBtn); actions.appendChild(archiveBtn);
   card.appendChild(actions); return card;
+}
+
+// Send an inbox item to a My Work project doc (appends as a bullet under '## Inbox notes')
+let _projectDropdownEl = null;
+function showProjectDropdown(item, anchorBtn, card) {
+  if (_projectDropdownEl) { _projectDropdownEl.remove(); _projectDropdownEl = null; return; }
+  const drop = document.createElement('div'); drop.className = 'inbox-move-dropdown'; _projectDropdownEl = drop;
+  const projects = (paraData && paraData.projects) ? paraData.projects : [];
+  if (projects.length === 0) {
+    const empty = document.createElement('div'); empty.className = 'inbox-move-item'; empty.style.color = '#666';
+    empty.textContent = 'No projects yet'; drop.appendChild(empty);
+  } else {
+    projects.forEach(proj => {
+      const row = document.createElement('div'); row.className = 'inbox-move-item';
+      const dot = document.createElement('span'); dot.className = 'inbox-move-dot'; dot.style.background = '#34d399';
+      const label = document.createElement('span'); label.textContent = proj.name;
+      row.appendChild(dot); row.appendChild(label);
+      row.onclick = () => { inboxAppendToProject(item, proj.id, card); drop.remove(); _projectDropdownEl = null; };
+      drop.appendChild(row);
+    });
+  }
+  document.body.appendChild(drop);
+  const rect = anchorBtn.getBoundingClientRect(); const dw = 240;
+  let left = rect.left; let top = rect.bottom + window.scrollY + 4;
+  if (left + dw > window.innerWidth - 12) left = window.innerWidth - dw - 12;
+  drop.style.left = Math.max(8, left) + 'px'; drop.style.top = top + 'px';
+  setTimeout(() => {
+    document.addEventListener('click', function closeDrop(ev) {
+      if (!drop.contains(ev.target) && ev.target !== anchorBtn) { drop.remove(); _projectDropdownEl = null; document.removeEventListener('click', closeDrop); }
+    });
+  }, 0);
+}
+
+function inboxAppendToProject(item, projectId, card) {
+  const proj = paraData.projects.find(p => p.id === projectId); if (!proj) return;
+  const heading = '## Inbox notes';
+  const bullet = '- ' + item.text;
+  if (proj.content.indexOf(heading) !== -1) {
+    proj.content = proj.content.replace(heading + '\n', heading + '\n' + bullet + '\n');
+  } else {
+    proj.content = (proj.content.replace(/\s+$/, '')) + '\n\n---\n\n' + heading + '\n' + bullet + '\n';
+  }
+  savePARA(paraData);
+  markInboxProcessed(item.id); card.remove(); syncInboxBadges(); updateInboxCountDisplay();
+  if (typeof activeWorkFile !== 'undefined' && activeWorkFile === projectId && typeof renderFileContent === 'function') renderFileContent(projectId);
+  showToast('Sent to ' + proj.name);
 }
 
 let _moveDropdownEl = null;
@@ -4010,6 +4093,7 @@ document.addEventListener('keydown', e => {
   if ((e.metaKey||e.ctrlKey) && e.key==='j') { e.preventDefault(); document.getElementById('captureOverlay') ? closeCaptureModal() : openCaptureModal(); }
 });
 syncInboxBadges();
+wireInboxCaptureInput();
 
 // ═══════════════════════════════════════════════════════════════════
 // Hemingway Bridge
