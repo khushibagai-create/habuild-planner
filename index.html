@@ -140,6 +140,20 @@
     .t-focus { background: #1a0d02; color: #fbbf24; }
     .t-none  { background: #1a1a1a; color: #555; }
 
+    .pri {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 2px 7px; border-radius: 99px;
+      margin-right: 8px; display: inline-block;
+      cursor: pointer; user-select: none;
+      vertical-align: middle;
+    }
+    .pri-p0   { background: #2a0d10; color: #f87171; border: 1px solid #4a1418; }
+    .pri-p1   { background: #2a1c08; color: #fbbf24; border: 1px solid #4a3010; }
+    .pri-p2   { background: #0a1a2a; color: #60a5fa; border: 1px solid #143058; }
+    .pri-none { background: transparent; color: #555; border: 1px dashed #2a2a2a; }
+    .pri-none:hover { color: #888; border-color: #444; }
+
     .del {
       opacity: 0; background: none; border: none;
       color: #666; font-size: 18px; cursor: pointer;
@@ -1099,15 +1113,9 @@ let followups=JSON.parse(localStorage.getItem(KEY+'_fu')||'null')||JSON.parse(JS
 const save=()=>localStorage.setItem(KEY,JSON.stringify(data));
 const saveFu=()=>localStorage.setItem(KEY+'_fu',JSON.stringify(followups));
 
-// ── Daily reset — clear done tasks on new day ─────────────────────────────────
+// ── Daily reset — actual run deferred to runDailyReset() after paraData loads ─
 const DATE_KEY='habuild_date';
 const todayStr=new Date().toISOString().split('T')[0];
-const savedDate=localStorage.getItem(DATE_KEY);
-if(savedDate && savedDate!==todayStr){
-  data.forEach(sec=>{sec.tasks=sec.tasks.filter(t=>!t.done);});
-  save();
-}
-localStorage.setItem(DATE_KEY,todayStr);
 
 // ── 12 Open Questions (Second Brain: 12 Favorite Problems) ────────────────────
 const Q12_KEY = 'habuild_12q';
@@ -1176,7 +1184,7 @@ function render(){
     const hdr=document.createElement('div');
     hdr.className='sec-header';
     hdr.innerHTML=`<div class="sec-dot ${sec.dot}"></div><div class="sec-title">${sec.label}</div><button class="clear-btn">clear done</button><div class="sec-count" id="cnt-${sec.id}">${done}/${sec.tasks.length}</div>`;
-    hdr.querySelector('.clear-btn').onclick=()=>{sec.tasks=sec.tasks.filter(t=>!t.done);save();render();};
+    hdr.querySelector('.clear-btn').onclick=()=>{logDoneTasks(collectDone(sec));sec.tasks=sec.tasks.filter(t=>!t.done);save();render();};
     wrap.appendChild(hdr);
     // Task list
     const list=document.createElement('div');
@@ -1209,6 +1217,24 @@ function mkTask(task,sec){
   body.className='task-body';
   body.style.position='relative';
 
+  // Priority pill (P0 / P1 / P2 / none) — click to cycle
+  const PRI_CYCLE = ['', 'P0', 'P1', 'P2'];
+  const priEl = document.createElement('span');
+  const setPri = () => {
+    const p = task.priority || '';
+    priEl.className = 'pri ' + (p==='P0'?'pri-p0':p==='P1'?'pri-p1':p==='P2'?'pri-p2':'pri-none');
+    priEl.textContent = p || '+';
+    priEl.title = p ? 'Priority: ' + p + ' (click to cycle)' : 'Set priority (click)';
+  };
+  setPri();
+  priEl.onclick = e => {
+    e.stopPropagation();
+    const i = PRI_CYCLE.indexOf(task.priority || '');
+    task.priority = PRI_CYCLE[(i + 1) % PRI_CYCLE.length] || '';
+    if (!task.priority) delete task.priority;
+    setPri(); save();
+  };
+
   const lbl=document.createElement('div');
   lbl.className='task-lbl';
   lbl.contentEditable='true';
@@ -1222,7 +1248,13 @@ function mkTask(task,sec){
   tagEl.textContent=task.tag||'no tag';
   tagEl.onclick=e=>{e.stopPropagation();showPicker(body,tagEl,task,sec);};
 
-  body.appendChild(lbl);
+  // Priority sits before the label (inline), tag below as before
+  const lblRow = document.createElement('div');
+  lblRow.style.cssText = 'display:flex; align-items:flex-start; gap:0;';
+  lblRow.appendChild(priEl);
+  lblRow.appendChild(lbl);
+  lbl.style.flex = '1';
+  body.appendChild(lblRow);
   body.appendChild(tagEl);
 
   // Delete
@@ -1966,7 +1998,19 @@ let customWorkFiles = JSON.parse(localStorage.getItem(CUSTOM_WF_KEY) || '[]');
 const saveCustomWF = () => localStorage.setItem(CUSTOM_WF_KEY, JSON.stringify(customWorkFiles));
 
 // ── PARA Structure ─────────────────────────────────────────────────────────────
-const PARA_KEY = 'habuild_para_v3';
+const PARA_KEY = 'habuild_para_v4';
+
+const DONE_LOG_SEED = {
+  id: 'done-log',
+  name: 'Done Tasks',
+  content: "# Done Tasks\nA running log of completed tasks. Newest day at top. Tasks land here when you check them off and run 'clear done', or automatically at the start of the next day.\n\n---\n",
+  paraSection: 'areas',
+  deadline: null,
+  builtIn: true,
+  sc: 'ps-a',
+  group: 'Overview',
+  filename: 'done-tasks.md',
+};
 
 function getDefaultPARA() {
   const mk = (f, section) => ({
@@ -1983,7 +2027,7 @@ function getDefaultPARA() {
   const extraIn = section => (typeof EXTRA_DOCS !== 'undefined' ? EXTRA_DOCS : []).filter(d => d.paraSection === section).map(d => mk(d, section));
   const projects = [...NEW_DOCS.map(f => mk(f, 'projects')), ...extraIn('projects')];
   const overview = WORK_FILES.find(f => f.id === 'overview');
-  const areas = [...(overview ? [mk(overview, 'areas')] : []), ...extraIn('areas')];
+  const areas = [...(overview ? [mk(overview, 'areas')] : []), { ...DONE_LOG_SEED }, ...extraIn('areas')];
   const resources = extraIn('resources');
   const archives = WORK_FILES.filter(f => f.id !== 'overview').map(f => mk(f, 'archives'));
   return { projects, areas, resources, archives };
@@ -2018,6 +2062,64 @@ function savePARA(para) {
 }
 
 let paraData = loadPARA();
+
+// Migration: ensure Done Tasks doc exists for users upgrading from PARA v3
+if (!paraData.areas.some(f => f.id === 'done-log')) {
+  paraData.areas.push({ ...DONE_LOG_SEED });
+  savePARA(paraData);
+}
+
+// ── Done Tasks logger + daily reset ───────────────────────────────────────────
+function collectDone(secFilter) {
+  const list = [];
+  data.forEach(sec => {
+    if (secFilter && sec.id !== secFilter.id) return;
+    sec.tasks.filter(t => t.done).forEach(t => list.push({
+      sec: sec.label, label: t.label, priority: t.priority || ''
+    }));
+  });
+  return list;
+}
+
+function logDoneTasks(tasksList) {
+  if (!tasksList || !tasksList.length) return;
+  const doc = paraData.areas.find(f => f.id === 'done-log');
+  if (!doc) return;
+  const dayHeader = '## ' + todayStr;
+  const lines = tasksList.map(d =>
+    '- [x] ' + (d.priority ? '[' + d.priority + '] ' : '') + '(' + d.sec + ') ' + d.label
+  ).join('\n');
+  if (doc.content.indexOf(dayHeader) !== -1) {
+    // append under today's block
+    doc.content = doc.content.replace(dayHeader + '\n', dayHeader + '\n' + lines + '\n');
+  } else {
+    // prepend a new dated block after the header preamble
+    const marker = '---\n';
+    const idx = doc.content.indexOf(marker);
+    const insertion = '\n' + dayHeader + '\n' + lines + '\n';
+    if (idx >= 0) {
+      doc.content = doc.content.slice(0, idx + marker.length) + insertion + doc.content.slice(idx + marker.length);
+    } else {
+      doc.content += insertion;
+    }
+  }
+  savePARA(paraData);
+  // If the user is currently viewing the Done Tasks doc, refresh it
+  if (typeof activeWorkFile !== 'undefined' && activeWorkFile === 'done-log' && typeof renderFileContent === 'function') {
+    renderFileContent('done-log');
+  }
+}
+
+function runDailyReset() {
+  const savedDate = localStorage.getItem(DATE_KEY);
+  if (savedDate && savedDate !== todayStr) {
+    logDoneTasks(collectDone());
+    data.forEach(sec => { sec.tasks = sec.tasks.filter(t => !t.done); });
+    save();
+  }
+  localStorage.setItem(DATE_KEY, todayStr);
+}
+runDailyReset();
 
 function findPARAFile(id) {
   const all = [...paraData.projects, ...paraData.areas, ...paraData.resources, ...paraData.archives];
