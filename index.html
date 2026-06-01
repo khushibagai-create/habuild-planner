@@ -1444,11 +1444,29 @@ function mkFollowup(fu){
   badge.textContent=STATUS_LABEL[fu.status];
   badge.title='Click to change status';
   badge.onclick=()=>{
-    fu.status=STATUS_CYCLE[fu.status];
-    badge.className='badge '+STATUS_CLASS[fu.status];
-    badge.textContent=STATUS_LABEL[fu.status];
-    el.classList.toggle('resolved',fu.status==='done');
-    saveFu();
+    const next = STATUS_CYCLE[fu.status];
+    fu.status = next;
+    if (next === 'done') {
+      // Log + fade out + remove
+      logDoneTasks([{sec:'Follow-up', label: fu.name + (fu.desc ? ': ' + fu.desc : ''), priority:''}]);
+      followups = followups.filter(f => f.id !== fu.id);
+      saveFu();
+      el.style.overflow = 'hidden';
+      el.style.maxHeight = el.offsetHeight + 'px';
+      el.style.transition = 'opacity 0.25s, max-height 0.3s, margin 0.3s, padding 0.3s';
+      requestAnimationFrame(() => {
+        el.style.opacity = '0';
+        el.style.maxHeight = '0';
+        el.style.marginTop = '0'; el.style.marginBottom = '0';
+        el.style.paddingTop = '0'; el.style.paddingBottom = '0';
+      });
+      setTimeout(() => el.remove(), 320);
+    } else {
+      badge.className = 'badge ' + STATUS_CLASS[fu.status];
+      badge.textContent = STATUS_LABEL[fu.status];
+      el.classList.remove('resolved');
+      saveFu();
+    }
   };
   badge.style.marginTop='4px';
 
@@ -2149,7 +2167,16 @@ function sweepDoneTasks() {
   }
   localStorage.setItem(DATE_KEY, todayStr);
 }
+function sweepDoneFollowups() {
+  const dones = followups.filter(f => f.status === 'done');
+  if (dones.length) {
+    logDoneTasks(dones.map(f => ({sec:'Follow-up', label: f.name + (f.desc ? ': ' + f.desc : ''), priority:''})));
+    followups = followups.filter(f => f.status !== 'done');
+    saveFu();
+  }
+}
 sweepDoneTasks();
+sweepDoneFollowups();
 
 function findPARAFile(id) {
   const all = [...paraData.projects, ...paraData.areas, ...paraData.resources, ...paraData.archives];
