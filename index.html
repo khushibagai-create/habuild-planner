@@ -1221,7 +1221,24 @@ function mkTask(task,sec){
   // Checkbox
   const cb=document.createElement('div');
   cb.className='cb'+(task.done?' on':'');
-  cb.onclick=()=>{task.done=!task.done;el.classList.toggle('done',task.done);cb.classList.toggle('on',task.done);save();updProg();updCnt(sec);};
+  cb.onclick=()=>{
+    if (task.done) return;
+    task.done = true;
+    el.classList.add('done'); cb.classList.add('on');
+    logDoneTasks([{sec: sec.label, label: task.label, priority: task.priority || ''}]);
+    sec.tasks = sec.tasks.filter(t => t.id !== task.id);
+    save();
+    el.style.overflow = 'hidden';
+    el.style.maxHeight = el.offsetHeight + 'px';
+    el.style.transition = 'opacity 0.25s, max-height 0.3s, margin 0.3s, padding 0.3s';
+    requestAnimationFrame(() => {
+      el.style.opacity = '0';
+      el.style.maxHeight = '0';
+      el.style.marginTop = '0'; el.style.marginBottom = '0';
+      el.style.paddingTop = '0'; el.style.paddingBottom = '0';
+    });
+    setTimeout(() => { el.remove(); updProg(); updCnt(sec); }, 320);
+  };
 
   // Body
   const body=document.createElement('div');
@@ -2121,16 +2138,18 @@ function logDoneTasks(tasksList) {
   }
 }
 
-function runDailyReset() {
-  const savedDate = localStorage.getItem(DATE_KEY);
-  if (savedDate && savedDate !== todayStr) {
-    logDoneTasks(collectDone());
+// Sweep any tasks currently marked done (e.g. left over from before this change,
+// or any state where a task is in `data` with done:true). Logs to Done Tasks then removes.
+function sweepDoneTasks() {
+  const list = collectDone();
+  if (list.length) {
+    logDoneTasks(list);
     data.forEach(sec => { sec.tasks = sec.tasks.filter(t => !t.done); });
     save();
   }
   localStorage.setItem(DATE_KEY, todayStr);
 }
-runDailyReset();
+sweepDoneTasks();
 
 function findPARAFile(id) {
   const all = [...paraData.projects, ...paraData.areas, ...paraData.resources, ...paraData.archives];
