@@ -221,7 +221,11 @@
     .fu-editable { outline: none; border-radius: 2px; padding: 0 2px; margin: 0 -2px; }
     .fu-editable:focus { background: #141414; box-shadow: 0 0 0 1px #333; }
 
-    .proj { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #151515; }
+    .proj { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #151515; position: relative; }
+    .proj-del { opacity: 0; background: none; border: none; color: #666; font-size: 14px; cursor: pointer; padding: 0 2px; line-height: 1; transition: opacity 0.15s; }
+    .proj:hover .proj-del { opacity: 1; }
+    .proj-del:hover { color: #ef4444; }
+    .proj-name[contenteditable="true"]:focus { background: #141414; outline: none; box-shadow: 0 0 0 1px #333; padding: 2px 4px; margin: -2px -4px; border-radius: 3px; color: #d0d0d0; }
     .proj:last-child { border-bottom: none; }
     .proj-name { font-size: 12px; color: #666; }
     .proj-s { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
@@ -1488,6 +1492,43 @@ function renderFuList(){
   followups.forEach(fu=>list.appendChild(mkFollowup(fu)));
 }
 
+// ── Side-rail projects (Today tab) ───────────────────────────────────────────
+const SIDE_PROJ_KEY = 'habuild_side_projects';
+const PROJ_STATUS_CYCLE = [
+  {l:'Active',     c:'ps-a'},
+  {l:'PRD review', c:'ps-d'},
+  {l:'Testing',    c:'ps-w'},
+  {l:'Scoping',    c:'ps-s'},
+];
+let sideProjects = JSON.parse(localStorage.getItem(SIDE_PROJ_KEY) || 'null') || [
+  {id:'sp_bb',      n:'Box Breathing',            s:'Active',     c:'ps-a'},
+  {id:'sp_recipes', n:'Recipes Tab',              s:'PRD review', c:'ps-d'},
+  {id:'sp_wfi',     n:'WhatsApp First Interface', s:'Testing',    c:'ps-w'},
+];
+const saveSideProjects = () => localStorage.setItem(SIDE_PROJ_KEY, JSON.stringify(sideProjects));
+
+function mkProjRow(p) {
+  const row = document.createElement('div'); row.className = 'proj';
+  const name = document.createElement('span'); name.className = 'proj-name';
+  name.contentEditable = 'true'; name.spellcheck = false; name.textContent = p.n;
+  name.onblur = () => { p.n = name.textContent.trim() || 'Untitled'; if (name.textContent.trim() === '') name.textContent = p.n; saveSideProjects(); };
+  name.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); name.blur(); } e.stopPropagation(); };
+  const status = document.createElement('span'); status.className = 'proj-s ' + p.c;
+  status.textContent = p.s; status.title = 'Click to cycle'; status.style.cursor = 'pointer';
+  status.onclick = () => {
+    const idx = PROJ_STATUS_CYCLE.findIndex(o => o.l === p.s);
+    const next = PROJ_STATUS_CYCLE[(idx + 1) % PROJ_STATUS_CYCLE.length];
+    p.s = next.l; p.c = next.c;
+    status.className = 'proj-s ' + p.c; status.textContent = p.s;
+    saveSideProjects();
+  };
+  const del = document.createElement('button'); del.className = 'proj-del';
+  del.innerHTML = '&times;'; del.title = 'Remove';
+  del.onclick = () => { sideProjects = sideProjects.filter(x => x.id !== p.id); saveSideProjects(); renderSide(); };
+  row.appendChild(name); row.appendChild(status); row.appendChild(del);
+  return row;
+}
+
 function renderSide(){
   const col=document.getElementById('sideCol');
   col.innerHTML='';
@@ -1516,16 +1557,26 @@ function renderSide(){
   fuBlock.appendChild(addFuRow);
   col.appendChild(fuBlock);
 
-  // Projects block
-  col.insertAdjacentHTML('beforeend',`
-    <div class="side-block">
-      <div class="side-title">Projects</div>
-      ${[
-        {n:'Box Breathing',             s:'Active',      c:'ps-a'},
-        {n:'Recipes Tab',               s:'PRD review',  c:'ps-d'},
-        {n:'WhatsApp First Interface',  s:'Testing',     c:'ps-w'},
-      ].map(p=>`<div class="proj"><span class="proj-name">${p.n}</span><span class="proj-s ${p.c}">${p.s}</span></div>`).join('')}
-    </div>`);
+  // Projects block (persisted, editable, with + Add project)
+  const projBlock = document.createElement('div');
+  projBlock.className = 'side-block';
+  const projTitle = document.createElement('div'); projTitle.className = 'side-title'; projTitle.textContent = 'Projects';
+  projBlock.appendChild(projTitle);
+  const projList = document.createElement('div');
+  sideProjects.forEach(p => projList.appendChild(mkProjRow(p)));
+  projBlock.appendChild(projList);
+  const projAddRow = document.createElement('div'); projAddRow.className = 'add-row'; projAddRow.style.marginTop = '10px';
+  projAddRow.innerHTML = '<button class="add-btn"><span class="plus">+</span> Add project</button>';
+  projAddRow.querySelector('button').onclick = () => {
+    const p = { id:'sp_'+Date.now(), n:'New project', s:'Active', c:'ps-a' };
+    sideProjects.push(p); saveSideProjects();
+    const row = mkProjRow(p); projList.appendChild(row);
+    const nameEl = row.querySelector('.proj-name'); nameEl.focus();
+    const r = document.createRange(); r.selectNodeContents(nameEl);
+    window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+  };
+  projBlock.appendChild(projAddRow);
+  col.appendChild(projBlock);
 
   renderFuList();
 }
