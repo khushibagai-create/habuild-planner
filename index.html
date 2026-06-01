@@ -1495,10 +1495,12 @@ function renderFuList(){
 // ── Side-rail projects (Today tab) ───────────────────────────────────────────
 const SIDE_PROJ_KEY = 'habuild_side_projects';
 const PROJ_STATUS_CYCLE = [
-  {l:'Active',     c:'ps-a'},
-  {l:'PRD review', c:'ps-d'},
-  {l:'Testing',    c:'ps-w'},
-  {l:'Scoping',    c:'ps-s'},
+  {l:'Brainstorming',    c:'ps-p'},
+  {l:'User research',    c:'ps-d'},
+  {l:'In dev',           c:'ps-a'},
+  {l:'Testing',          c:'ps-w'},
+  {l:'Impact analysis',  c:'ps-r'},
+  {l:'Done',             c:'ps-s'},
 ];
 let sideProjects = JSON.parse(localStorage.getItem(SIDE_PROJ_KEY) || 'null') || [
   {id:'sp_bb',      n:'Box Breathing',            s:'Active',     c:'ps-a'},
@@ -1508,9 +1510,12 @@ let sideProjects = JSON.parse(localStorage.getItem(SIDE_PROJ_KEY) || 'null') || 
 const saveSideProjects = () => localStorage.setItem(SIDE_PROJ_KEY, JSON.stringify(sideProjects));
 
 function mkProjRow(p) {
+  const isDone = p.s === 'Done';
   const row = document.createElement('div'); row.className = 'proj';
+  if (isDone) row.style.opacity = '0.55';
   const name = document.createElement('span'); name.className = 'proj-name';
   name.contentEditable = 'true'; name.spellcheck = false; name.textContent = p.n;
+  if (isDone) name.style.textDecoration = 'line-through';
   name.onblur = () => { p.n = name.textContent.trim() || 'Untitled'; if (name.textContent.trim() === '') name.textContent = p.n; saveSideProjects(); };
   name.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); name.blur(); } e.stopPropagation(); };
   const status = document.createElement('span'); status.className = 'proj-s ' + p.c;
@@ -1519,8 +1524,8 @@ function mkProjRow(p) {
     const idx = PROJ_STATUS_CYCLE.findIndex(o => o.l === p.s);
     const next = PROJ_STATUS_CYCLE[(idx + 1) % PROJ_STATUS_CYCLE.length];
     p.s = next.l; p.c = next.c;
-    status.className = 'proj-s ' + p.c; status.textContent = p.s;
     saveSideProjects();
+    renderSide();
   };
   const del = document.createElement('button'); del.className = 'proj-del';
   del.innerHTML = '&times;'; del.title = 'Remove';
@@ -1563,7 +1568,16 @@ function renderSide(){
   const projTitle = document.createElement('div'); projTitle.className = 'side-title'; projTitle.textContent = 'Projects';
   projBlock.appendChild(projTitle);
   const projList = document.createElement('div');
-  sideProjects.forEach(p => projList.appendChild(mkProjRow(p)));
+  const activeProjs = sideProjects.filter(p => p.s !== 'Done');
+  const doneProjs   = sideProjects.filter(p => p.s === 'Done');
+  activeProjs.forEach(p => projList.appendChild(mkProjRow(p)));
+  if (doneProjs.length) {
+    const doneHeader = document.createElement('div');
+    doneHeader.style.cssText = 'font-size:9px;font-weight:700;color:#3a3a3a;text-transform:uppercase;letter-spacing:0.12em;margin:14px 0 6px;padding-top:10px;border-top:1px solid #1a1a1a;';
+    doneHeader.textContent = `Done · ${doneProjs.length}`;
+    projList.appendChild(doneHeader);
+    doneProjs.forEach(p => projList.appendChild(mkProjRow(p)));
+  }
   projBlock.appendChild(projList);
   const projAddRow = document.createElement('div'); projAddRow.className = 'add-row'; projAddRow.style.marginTop = '10px';
   projAddRow.innerHTML = '<button class="add-btn"><span class="plus">+</span> Add project</button>';
