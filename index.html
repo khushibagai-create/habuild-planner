@@ -1852,13 +1852,13 @@ const WORK_FILES=[
 
 // ── Current work (added 2026-05-27) — overrides the Work Plan + adds active projects ──
 const OVERVIEW_CONTENT = `# Habuild PM — Work Plan
-**Last updated**: May 27, 2026
+**Last updated**: June 1, 2026
 **Owner**: Khushi
 
 ---
 
 ## North Star
-> Figure out what to build with or apart from Yoga to add more value in members' health & wellness journey.
+> Figure out what to build with or apart from Yoga to add more value in members' health and wellness journey.
 
 ---
 
@@ -1866,32 +1866,63 @@ const OVERVIEW_CONTENT = `# Habuild PM — Work Plan
 
 | # | Project | Status |
 | --- | --- | --- |
-| 1 | Box Breathing | Active — heaviest track |
-| 2 | Recipes Tab | PRD with engineering |
-| 3 | WhatsApp First Interface | Final testing → experiment |
+| 1 | Box Breathing Phase 2 | Ready to ship from dev side |
+| 2 | Box Breathing Phase 3 | Design finalised, in dev (customisation, onboarding, lung test, progression) |
+| 3 | Recipes Tab | Design finalised, dev in progress (backend + frontend) |
+| 4 | WhatsApp First Interface | Experiment rolling out (2,000 members messaged) |
+| 5 | WhatsApp communities in app | Brainstormed; planning Stories integration |
+| 6 | Body pain and relief | Direction-finding (mild content vs severe physio book) |
+| 7 | Home screen revamp | Data analysis this week |
+| 8 | App GTM | Planning this week |
 
 ---
 
-## This Week
+## What shipped last week
 
 ### Box Breathing
-- [ ] Close out Phase 3 PRD open questions
-- [ ] Follow up — Pooja (Phase 2 backend)
-- [ ] Follow up — Bala (WhatsApp-alike UI ticket)
-- [ ] Follow up — Himanshu (settings bugs: audio toggle, change-time deep-link)
+Four prototype iterations to find the right first-session flow:
+1. Theme variant: dropped, members did not need it.
+2. Settings variant: customisation for regular members. Big need, moving into the app next sprint.
+3. Onboarding flow: explain box breathing before the first session, so members are not dropped in cold.
+4. Lung-test progress check: short breath-hold check that measures progress for members who do box breathing.
+Phase 2 is also ready to ship from the dev side.
 
 ### Recipes
-- [ ] Recipes Tab PRD → engineering review
-- [ ] Hand Figma file to Deba for design pass
+Build, test, iterate loop:
+1. Second prototype shipped: Nutrition Magazine 7-day journey, live with members starting May 18.
+2. Round 2 feedback collected from members.
+3. Two to three changes applied before locking the direction.
+4. Recipes Tab PRD drafted Monday, handed to engineering. Design finalised, backend and frontend dev going on.
 
 ### WhatsApp First Interface
-- [ ] Final round of testing
-- [ ] Hand to experiment cohort once testing closes
+1. Dev complete. Walked support team through the full chat-first flow.
+2. Feedback surfaced gaps and bugs.
+3. Iterated and cleaned up the build.
+4. Final round of testing closed. Experiment rolling out: 2,000 members already messaged to download and test.
+Closed out the Sunday-sessions layout (multi-session-day variant that has been open since the WFI PRD).
+
+### Research
+WhatsApp test group (1,100+ messages, May 6 to 21) synthesised into a single insight PDF that feeds both Recipes and Box Breathing.
+
+---
+
+## Focus this week
+
+- [ ] Data analysis for Box Breathing
+- [ ] Data analysis for Home screen revamp
+- [ ] Data analysis for WhatsApp-like UI
+- [ ] GTM planning for the app
+- [ ] Box Breathing Phase 3 dev support: continuous discussion on doubts
+- [ ] Recipes dev support: backend and frontend doubts
+- [ ] WhatsApp First Interface experiment rollout (slow expansion beyond 2,000)
+- [ ] WhatsApp communities: plan Stories integration for member communication
+- [ ] Body pain and relief: design the mild-vs-severe flow (mild = relevant content, severe = physio booking)
+- [ ] Content homescreen experiment insight: design personalisation by health condition (top ask: back-pain members want back-pain videos — filter or segmentation, not more content)
 
 ---
 
 ## Archive
-Older Feb–Mar work (14-day trial, A/B infra, dynamic homescreen, notifications, TV app, cognitive games, content categorisation, product direction, user research synthesis) is parked under **Archives** in My Work.
+Older Feb to Mar work (14-day trial, A/B infra, dynamic homescreen, notifications, TV app, cognitive games, content categorisation, product direction, user research synthesis) is parked under **Archives** in My Work.
 `;
 
 const NEW_DOCS = [
@@ -2095,7 +2126,7 @@ let customWorkFiles = JSON.parse(localStorage.getItem(CUSTOM_WF_KEY) || '[]');
 const saveCustomWF = () => localStorage.setItem(CUSTOM_WF_KEY, JSON.stringify(customWorkFiles));
 
 // ── PARA Structure ─────────────────────────────────────────────────────────────
-const PARA_KEY = 'habuild_para_v4';
+const PARA_KEY = 'habuild_para_v5';
 
 const DONE_LOG_SEED = {
   id: 'done-log',
