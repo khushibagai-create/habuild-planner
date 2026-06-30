@@ -1128,6 +1128,53 @@ let followups=JSON.parse(localStorage.getItem(KEY+'_fu')||'null')||JSON.parse(JS
 const save=()=>localStorage.setItem(KEY,JSON.stringify(data));
 const saveFu=()=>localStorage.setItem(KEY+'_fu',JSON.stringify(followups));
 
+// ── One-time task seeds (idempotent, runs once per flag) ───────────────────
+(function seedTasks(){
+  const SEEDS=[
+    { flag:'habuild_seed_20260630_v1', tags:[
+        ['QA','t-data'],['home revamp','t-focus'],['roadmap','t-focus'],
+        ['video tutorial','t-data'],['timezone','t-coord'],['analytics','t-data'],
+        ['notifications','t-calls'],['reminders','t-focus'] ],
+      add:{
+        deep:[
+          {label:'Create QA process document',tag:'QA',tc:'t-data',key:'qa process'},
+          {label:'Reminder design',tag:'reminders',tc:'t-focus',key:'reminder design',done:true},
+          {label:'Test the home screen revamp',tag:'home revamp',tc:'t-focus',key:'home screen revamp'},
+          {label:'Finalize next-quarter roadmap + problem statements',tag:'roadmap',tc:'t-focus',key:'next-quarter roadmap'},
+          {label:'Create videos for the video tutorial',tag:'video tutorial',tc:'t-data',key:'video tutorial'},
+        ],
+        coord:[
+          {label:'Discuss timezone change ticket with Bala (after home revamp test)',tag:'timezone',tc:'t-coord',key:'timezone change ticket'},
+          {label:'Give events to Pooja',tag:'analytics',tc:'t-data',key:'give events to pooja'},
+          {label:'Set up a call with Kirat re: notification status',tag:'notifications',tc:'t-calls',key:'kirat'},
+        ],
+        data:[
+          {label:'Check data for all features launched in the last 3 months',tag:'analytics',tc:'t-data',key:'features launched in the last 3 months'},
+        ],
+      } },
+  ];
+  let changed=false, tagsChanged=false;
+  for(const seed of SEEDS){
+    if(localStorage.getItem(seed.flag)) continue;
+    (seed.tags||[]).forEach(([l,c])=>{ if(!customTags.some(t=>t.l===l)) { customTags.push({l,c}); tagsChanged=true; } });
+    const existing=data.flatMap(s=>(s.tasks||[]).map(t=>(t.label||'').toLowerCase()));
+    const isDup=k=>existing.some(l=>l.includes(k));
+    let n=Number(localStorage.getItem('habuild_seed_ctr')||'1');
+    for(const[secId,items] of Object.entries(seed.add)){
+      const sec=data.find(s=>s.id===secId); if(!sec) continue;
+      for(const it of items){
+        if(isDup(it.key)) continue;
+        sec.tasks.push({id:'seed'+(n++),label:it.label,tag:it.tag,tc:it.tc,done:!!it.done});
+        changed=true;
+      }
+    }
+    localStorage.setItem('habuild_seed_ctr',String(n));
+    localStorage.setItem(seed.flag,'1');
+  }
+  if(tagsChanged) saveTags();
+  if(changed) save();
+})();
+
 // ── Daily reset — actual run deferred to runDailyReset() after paraData loads ─
 const DATE_KEY='habuild_date';
 const todayStr=new Date().toISOString().split('T')[0];
